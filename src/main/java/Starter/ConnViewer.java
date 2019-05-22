@@ -1,3 +1,5 @@
+package Starter;
+
 import DBConn.MysqlConn;
 
 import javax.swing.*;

@@ -5,6 +5,8 @@ import com.mysql.jdbc.Connection;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class InsertColumn {
     public void driver(Connection conn, String tableName, String dbName){
@@ -29,11 +31,16 @@ public class InsertColumn {
             Define define=new Define();
             try {
                 define.insertCoulum(conn,tableName,dbName,sql);
-                frame.setVisible(false);
-                TableStructure.listen=1;
+                frame.dispose();
+                TableStructure.insertTrriger.doClick();
             }
             catch (Exception ex){
-                ex.printStackTrace();
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                ex.printStackTrace(pw);
+                if(sw.toString().contains("Duplicate")){
+                    JOptionPane.showMessageDialog(null,"字段名不能重复","错误信息",JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
