@@ -9,14 +9,13 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TableStructure extends JRadioButton {
+    static int listen=0;
     private JFrame frame = new JFrame();
     private JPanel structurePanel=new JPanel();
     private JTextField[] columnName=new JTextField[100];
@@ -30,7 +29,6 @@ public class TableStructure extends JRadioButton {
     private JButton add=new JButton("新建字段");
     public JSONArray info=new JSONArray();
     public JSONObject infoObject=new JSONObject();
-    public static JButton insertTrriger=new JButton();
 
     public void driver(ResultSet rs, Connection conn,String tableName,String dbName)throws SQLException {
         structurePanel.setLayout(new GridLayout(0,6,0,0));
@@ -95,7 +93,7 @@ public class TableStructure extends JRadioButton {
                 try {
                     delete1.delete(deleteSql, conn);
                     frame.dispose();
-                    TableStructure tableStructure=new TableStructure();
+                    TableStructure tableStructure=new TableStructure()；
                     Query query1=new Query();
                     ResultSet tempRs = query1.queryColumns(conn, dbName, tableName);
                     tableStructure.driver(tempRs,conn,tableName,dbName);
@@ -149,20 +147,18 @@ public class TableStructure extends JRadioButton {
         add.addActionListener(event->{
             InsertColumn insertColumn=new InsertColumn();
             insertColumn.driver(conn,tableName,dbName);
-
-        });
-        insertTrriger.addActionListener(e->{
-            Query query1 = new Query();
-            try {
-                frame.dispose();
-                TableStructure tableStructure=new TableStructure();
-                ResultSet tempRs = query1.queryColumns(conn, dbName, tableName);
-                tableStructure.driver(tempRs, conn, tableName, dbName);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            if(listen==1) {
+                System.out.print("aaa");
+                Query query1 = new Query();
+                try {
+                    ResultSet tempRs = query1.queryColumns(conn, dbName, tableName);
+                    driver(tempRs, conn, tableName, dbName);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                listen=0;
             }
         });
-
         frame.add(structurePanel);
         frame.setSize(600,60+columnCount*50);
         frame.setTitle("编辑"+tableName+"结构");

@@ -1,8 +1,7 @@
-package Starter;
-
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
 import MysqlOperation.View.TableStructure;
+import MysqlOperation.domin.Define;
 import MysqlOperation.domin.Delete;
 import MysqlOperation.View.InsertInfo;
 import MysqlOperation.domin.Query;
@@ -23,7 +22,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 
 public class MainView {
     public static void main(String[] args){
@@ -72,7 +70,6 @@ class  ViewFrame extends JFrame{
     private static final int DEFAULT_HEIGHT=800;
 
     public static JButton listButton=new JButton();
-    public static JButton cusListener=new JButton();
 
     private DefaultMutableTreeNode root;
     private JTree tree;
@@ -86,9 +83,9 @@ class  ViewFrame extends JFrame{
     String connectingName;
     String connectingPsw;
     String connectingUrl;
-    Connection[] connecting=new Connection[1000];//记录所有connection
+    Connection[] connecting=new Connection[1000];
     int connectingCount=0;
-    public static Connection firstConn;//新建的连接
+    public static Connection firstConn;
 
     private JSONArray updateInfo=new JSONArray();
     private JSONObject updateObject=new JSONObject();
@@ -260,97 +257,39 @@ class  ViewFrame extends JFrame{
         setJMenuBar(menuBar);
 
         JMenu dbType=new JMenu("数据库连接");
-        JMenu optimize=new JMenu("优化");
         JMenu sql=new JMenu("SQL操作");
-//        JMenu view=new JMenu("视图操作");
-//        JMenu func=new JMenu("函数");
-//        JMenu backup=new JMenu("备份");
+        JMenu view=new JMenu("视图操作");
+        JMenu func=new JMenu("函数");
+        JMenu backup=new JMenu("备份");
         JMenu log=new JMenu("日志");
         JMenu running=new JMenu("运行分析");
         JMenu about=new JMenu("关于");
         menuBar.add(dbType);
-        menuBar.add(optimize);
-        //menuBar.add(view);
+        menuBar.add(view);
         menuBar.add(sql);
-        //menuBar.add(func);
-        //menuBar.add(backup);
+        menuBar.add(func);
+        menuBar.add(backup);
         menuBar.add(log);
         menuBar.add(running);
         menuBar.add(about);
 
-        JMenuItem localLog=new JMenuItem("查看MySQL日志");
-        JMenuItem lunaLog=new JMenuItem("查看Luna-SQL日志");
-        log.add(localLog);log.add(localLog);
 
-        JMenuItem optimizeConsole=new JMenuItem("优化控制台");
-        JMenuItem optListenPath=new JMenuItem("设置日志读取路径");
-        JMenuItem optimizeHistory=new JMenuItem("优化建议历史");
-        optimize.add(optimizeConsole);optimize.add(optListenPath);optimize.add(optimizeHistory);
-
-        //JMenuItem oracle=new JMenuItem("Oracle");
+        JMenuItem oracle=new JMenuItem("Oracle");
         JMenuItem mysql=new JMenuItem("Mysql");
-        //dbType.add(oracle);
+        dbType.add(oracle);
         dbType.add(mysql);
 
-        JMenuItem newQuery =new JMenuItem("自定义sql");
+        JMenuItem newQuery =new JMenuItem("新建sql文件");
         JMenuItem openQuery =new JMenuItem("打开sql文件");
-        //JMenuItem newLunaSql=new JMenuItem("新建Luna-SQL查询");
+        JMenuItem newLunaSql=new JMenuItem("新建Luna-SQL查询");
         sql.add(newQuery);
         sql.add(openQuery);
-        //sql.add(newLunaSql);
+        sql.add(newLunaSql);
 
         JMenuItem news=new JMenuItem("关于");
         JMenuItem help=new JMenuItem("帮助");
         about.add(help);
         about.add(news);
-
-        newQuery.addActionListener(event->{
-            CustomSql customSql=new CustomSql();
-            customSql.customSqlDriver(connecting[connectingCount]);
-        });
-        cusListener.addActionListener(event->{
-            nowTabIndex+=1;
-            try {
-                ResultSetMetaData rsmd1 = rs.getMetaData();
-                int columnCount = rsmd1.getColumnCount();
-                rs.last();
-                int rowCount = rs.getRow();
-                rs.beforeFirst();
-                Object[] title = new Object[columnCount];
-                Object[][] info = new Object[rowCount][columnCount];
-                for(int i=1;i<=columnCount;i++) {
-                    title[i-1]=rsmd1.getColumnName(i);
-                }
-                int n=0;
-                while (rs.next()) {
-                    for (int i = 1; i <=columnCount; i++) {
-                        info[n][i-1] = rs.getString(i);
-                    }
-                    n++;
-                }
-                table[nowTabIndex]=new JTable(info,title);
-                table[nowTabIndex].setEnabled(false);
-                table[nowTabIndex].setRowHeight(20);
-                System.out.print(table[nowTabIndex].getRowCount());
-                JTableHeader tableHeader = table[nowTabIndex].getTableHeader();
-                tableHeader.setResizingAllowed(true);
-                tableHeader.setReorderingAllowed(true);
-                table[nowTabIndex].setOpaque(false);
-                JScrollPane scrollPane=new JScrollPane();
-                scrollPane.setViewportView(table[nowTabIndex]);
-                tabbedPane.addTab("自定义查询",leafIcon2,scrollPane);
-
-                confirmTool[nowTabIndex]=new JButton("提交修改");
-                cancelTool[nowTabIndex]=new JButton("取消");
-                deleteTool[nowTabIndex]=new JButton("删除选定记录");
-
-                tabbedPane.updateUI();
-            }
-            catch (SQLException ex){
-                ex.printStackTrace();
-            }
-        });
-
 
         news.addActionListener(event->{
             JOptionPane.showMessageDialog(
@@ -481,7 +420,7 @@ class  ViewFrame extends JFrame{
                     int testTemp=0;
                     for(int i=0;i<ReadInfo.readInfo().length();i++) {
                         if (ReadInfo.readInfo().getJSONObject(i).getString("connName").equals(str)) {
-                            testTemp=1;break;
+                            testTemp=1;
                         }
                     }
                     if (testTemp==0){
@@ -820,41 +759,40 @@ class  ViewFrame extends JFrame{
         tabMenu.show(tabbedPane,x,y);
     }
     public void tabRefresh(int index){
-        if(tabbedPane.getTitleAt(index).contains("-")) {
-            String[] str = tabbedPane.getTitleAt(index).split("-");
-            String title = tabbedPane.getTitleAt(index);
-            JScrollPane scrollPane = queryTable(Integer.parseInt(str[1]), str[2], str[3], index);
-            tabbedPane.remove(index);
-            tabbedPane.insertTab(title, leafIcon2, scrollPane, null, index);
-            tabbedPane.setSelectedIndex(index);
-            Query query = new Query();
-            try {
-                rs = query.query(connecting[connectingCount], str[2], str[3]);
-                ResultSetMetaData rsmd1 = rs.getMetaData();
-                int columnCount = rsmd1.getColumnCount();
-                rs.last();
-                int rowCount = rs.getRow();
-                rs.beforeFirst();
-                Object[] title1 = new Object[columnCount];
-                Object[][] info = new Object[rowCount][columnCount];
-                for (int i = 1; i <= columnCount; i++) {
-                    title1[i - 1] = rsmd1.getColumnName(i);
-                }
-                int n = 0;
-                while (rs.next()) {
-                    for (int i = 1; i <= columnCount; i++) {
-                        info[n][i - 1] = rs.getString(i);
-                    }
-                    n++;
-                }
-                tempTable[index] = new JTable(info, title1);
-                updateSQL = new String[1000];
-                confirmTool[index].setEnabled(false);
-                cancelTool[index].setEnabled(false);
-                deleteTool[index].setEnabled(false);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        String[] str=tabbedPane.getTitleAt(index).split("-");
+        String title=tabbedPane.getTitleAt(index);
+        JScrollPane scrollPane=queryTable(Integer.parseInt(str[1]),str[2],str[3],index);
+        tabbedPane.remove(index);
+        tabbedPane.insertTab(title,leafIcon2,scrollPane,null,index);
+        tabbedPane.setSelectedIndex(index);
+        Query query=new Query();
+        try {
+            rs=query.query(connecting[connectingCount],str[2],str[3]);
+            ResultSetMetaData rsmd1 = rs.getMetaData();
+            int columnCount = rsmd1.getColumnCount();
+            rs.last();
+            int rowCount=rs.getRow();
+            rs.beforeFirst();
+            Object[] title1=new Object[columnCount];
+            Object[][] info=new Object[rowCount][columnCount];
+            for(int i=1;i<=columnCount;i++) {
+                title1[i-1]=rsmd1.getColumnName(i);
             }
+            int n=0;
+            while (rs.next()) {
+                for (int i = 1; i <=columnCount; i++) {
+                    info[n][i-1] = rs.getString(i);
+                }
+                n++;
+            }
+            tempTable[index]=new JTable(info,title1);
+            updateSQL=new String[1000];
+            confirmTool[index].setEnabled(false);
+            cancelTool[index].setEnabled(false);
+            deleteTool[index].setEnabled(false);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 }
