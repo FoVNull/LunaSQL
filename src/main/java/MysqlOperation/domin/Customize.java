@@ -11,10 +11,10 @@ public class Customize {
     public ResultSet excuteSql(Connection conn,String sql) throws SQLException {
         PreparedStatement pst=(PreparedStatement)conn.prepareStatement(sql);
         ResultSet rs=null;
-        if(sql.contains("SELECT")||sql.contains("select")){
+        try {
             rs=pst.executeQuery();
         }
-        else{
+        catch (SQLException ex) {
             pst.executeUpdate();
         }
         return rs;

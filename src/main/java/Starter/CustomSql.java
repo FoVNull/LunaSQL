@@ -5,6 +5,9 @@ import Starter.ViewFrame;
 import com.mysql.jdbc.Connection;
 
 import javax.swing.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.ResultSet;
 
 public class CustomSql{
     private JFrame frame=new JFrame();
@@ -23,12 +26,16 @@ public class CustomSql{
         excute.addActionListener(event->{
             Customize customize=new Customize();
             try {
-                ViewFrame.rs= customize.excuteSql(conn, sql.getText());
-                ViewFrame.cusListener.doClick();
+                ResultSet temp=customize.excuteSql(conn, sql.getText());
+                ViewFrame.rs= temp;
+                if(temp!=null) ViewFrame.cusListener.doClick();
                 frame.dispose();
             }
             catch (Exception ex){
-                ex.printStackTrace();
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                ex.printStackTrace(pw);
+                JOptionPane.showMessageDialog(null,pw.toString(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
 

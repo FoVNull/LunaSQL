@@ -308,6 +308,7 @@ class  ViewFrame extends JFrame{
             CustomSql customSql=new CustomSql();
             customSql.customSqlDriver(connecting[connectingCount]);
         });
+        //自定义sql监听-----
         cusListener.addActionListener(event->{
             nowTabIndex+=1;
             try {
@@ -331,7 +332,6 @@ class  ViewFrame extends JFrame{
                 table[nowTabIndex]=new JTable(info,title);
                 table[nowTabIndex].setEnabled(false);
                 table[nowTabIndex].setRowHeight(20);
-                System.out.print(table[nowTabIndex].getRowCount());
                 JTableHeader tableHeader = table[nowTabIndex].getTableHeader();
                 tableHeader.setResizingAllowed(true);
                 tableHeader.setReorderingAllowed(true);
