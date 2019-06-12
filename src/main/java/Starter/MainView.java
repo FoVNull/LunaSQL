@@ -19,8 +19,6 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -92,15 +90,14 @@ class  ViewFrame extends JFrame{
 
     private JSONArray updateInfo=new JSONArray();
     private JSONObject updateObject=new JSONObject();
-    String[] pk=new String[100];
     String[] updateSQL=new String[1000];
-    int[] sqlCount=new int[10000];
+    int[] sqlCount=new int[1000];
     JTable[] tempTable=new JTable[100];
     String deleteSql=new String();
 
     private DefaultTreeCellRenderer render = new DefaultTreeCellRenderer();
-    ImageIcon leafIcon=new ImageIcon();
-    ImageIcon leafIcon2=new ImageIcon();
+    ImageIcon leafIcon;
+    ImageIcon leafIcon2;
     ImageIcon openIcon;
     ImageIcon closeIcon;
 
@@ -347,7 +344,7 @@ class  ViewFrame extends JFrame{
                 tabbedPane.updateUI();
             }
             catch (SQLException ex){
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -378,8 +375,8 @@ class  ViewFrame extends JFrame{
                 connecting[connectingCount]=firstConn;
                 tree.updateUI();
             }
-            catch (Exception e){
-                e.printStackTrace();
+            catch (SQLException e){
+                JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -452,7 +449,7 @@ class  ViewFrame extends JFrame{
                             connecting[connectingCount] = mysqlConn.conn(connectingUrl, connectingName, connectingPsw);
                             rs = mysqlConn.showDB(connecting[connectingCount]);
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
@@ -465,8 +462,8 @@ class  ViewFrame extends JFrame{
                     //root.add(connNode);
                     tree.updateUI();
                 }
-                catch (Exception e){
-                    e.printStackTrace();
+                catch (SQLException e){
+                    JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -501,8 +498,8 @@ class  ViewFrame extends JFrame{
                         tree.updateUI();
                         connecting[connectingCount].close();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -556,8 +553,8 @@ class  ViewFrame extends JFrame{
                     }
                     temp.setUserObject(temp.getUserObject());
                     tree.updateUI();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -598,8 +595,8 @@ class  ViewFrame extends JFrame{
                 TableStructure tableStructure1=new TableStructure();
                 tableStructure1.driver(rs,connecting[connectingCount],temp.getUserObject().toString(),dbName.getUserObject().toString());
             }
-            catch (Exception ex){
-                ex.printStackTrace();
+            catch (SQLException ex){
+                JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -642,8 +639,8 @@ class  ViewFrame extends JFrame{
                 InsertInfo insertInfo=new InsertInfo();
                 insertInfo.insert(rs,connecting[connectingCount],temp.getUserObject().toString(),dbName.getUserObject().toString());
             }
-            catch (Exception ex){
-                ex.printStackTrace();
+            catch (SQLException ex){
+                 JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
         connNodeMunu.show(tree,x,y);
@@ -712,8 +709,8 @@ class  ViewFrame extends JFrame{
                                 }
                             }
                         }
-                        catch (Exception ex){
-                            ex.printStackTrace();
+                        catch (SQLException ex){
+                            JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                         }
                         confirmTool[tabIndex].addActionListener(event->{
                             Update update=new Update();
@@ -722,12 +719,12 @@ class  ViewFrame extends JFrame{
                                 updateSQL=new String[1000];
                                 tabRefresh(tabIndex);
                             }
-                            catch (Exception ex){
-                                StringWriter sw = new StringWriter();
-                                PrintWriter pw = new PrintWriter(sw);
-                                ex.printStackTrace(pw);
-                                if(sw.toString().contains("Duplicate")){
+                            catch (SQLException ex){
+                                if(ex.getMessage().contains("Duplicate")){
                                     JOptionPane.showMessageDialog(null,"主键值不唯一","错误",JOptionPane.WARNING_MESSAGE);
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null,ex.getMessage(),"错误",JOptionPane.WARNING_MESSAGE);
                                 }
                             }
                         });
@@ -767,8 +764,8 @@ class  ViewFrame extends JFrame{
                                 }
                             }
                         }
-                        catch (Exception ex){
-                            ex.printStackTrace();
+                        catch (SQLException ex){
+                            JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                         }
                         Delete delete1=new Delete();
                         try {
@@ -776,10 +773,8 @@ class  ViewFrame extends JFrame{
                             tabRefresh(tabIndex);
                             deleteTool[tabIndex].setEnabled(false);
                         }
-                        catch (Exception ex){
-                            StringWriter sw = new StringWriter();
-                            PrintWriter pw = new PrintWriter(sw);
-                            ex.printStackTrace(pw);
+                        catch (SQLException ex){
+                            JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                         }
                     });
                 }
@@ -791,8 +786,8 @@ class  ViewFrame extends JFrame{
             table[tabIndex].setOpaque(false);
             scrollPane.setViewportView(table[tabIndex]);
         }
-        catch (Exception ex){
-            ex.printStackTrace();
+        catch (SQLException ex){
+            JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
         return scrollPane;
     }
@@ -852,8 +847,8 @@ class  ViewFrame extends JFrame{
                 confirmTool[index].setEnabled(false);
                 cancelTool[index].setEnabled(false);
                 deleteTool[index].setEnabled(false);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         }
     }

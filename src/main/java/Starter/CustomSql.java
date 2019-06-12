@@ -32,10 +32,7 @@ public class CustomSql{
                 frame.dispose();
             }
             catch (Exception ex){
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                ex.printStackTrace(pw);
-                JOptionPane.showMessageDialog(null,pw.toString(),"Error",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
 
