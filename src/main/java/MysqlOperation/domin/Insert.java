@@ -1,16 +1,16 @@
 package MysqlOperation.domin;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 import org.json.JSONArray;
 
 import javax.swing.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Insert {
-    public void insert(Connection conn, String table, String dbName, String[] columnName,String[] value){
+    public void insert(Connection conn, String table, String dbName, String[] columnName, String[] value){
         int i = 0;
         int columnCount=columnName.length;
         String sql="insert into " + dbName + "." + table+"(";

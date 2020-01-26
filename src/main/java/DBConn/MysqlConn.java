@@ -1,16 +1,13 @@
 package DBConn;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class MysqlConn {
     public Connection conn(String url,String user,String password)throws ClassNotFoundException, SQLException{
-        String forword="jdbc:mysql://";
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection conn= (Connection) DriverManager.getConnection(forword+url, user, password);
+        String forword="jdbc:mysql://";String backward="?useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true";
+        //Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");//8以上的版本用这个驱动
+        Connection conn=DriverManager.getConnection(forword+url+backward, user, password);
         //System.out.print(conn);
         return conn;
     }

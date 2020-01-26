@@ -2,14 +2,12 @@ package Starter;
 
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
+import Log.LogListener.LogReader;
 import MysqlOperation.View.TableStructure;
 import MysqlOperation.domin.Delete;
 import MysqlOperation.View.InsertInfo;
 import MysqlOperation.domin.Query;
 import MysqlOperation.domin.Update;
-import com.mysql.jdbc.Connection;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -19,6 +17,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -29,7 +28,7 @@ public class MainView {
             JFrame frame=new ViewFrame();
             frame.setTitle("Luna-SQL");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
@@ -58,15 +57,15 @@ class  ViewFrame extends JFrame{
     private JLabel mainView=new JLabel();
     private JLabel dbList=new JLabel();
     private JToolBar toolBar=new JToolBar();
-    private JButton[] confirmTool=new JButton[100];
-    private JButton[] cancelTool=new JButton[100];
-    private JButton[] deleteTool=new JButton[100];
+    private JButton[] confirmTool=new JButton[20];
+    private JButton[] cancelTool=new JButton[20];
+    private JButton[] deleteTool=new JButton[20];
 
     private JPanel mainPanel=new JPanel();
     private JPanel listPanel=new JPanel();
     private JScrollPane listScroll=new JScrollPane();
     private JSplitPane allSplitPane=new JSplitPane();
-    private static final int DEFAULT_WIDTH=1200;
+    private static final int DEFAULT_WIDTH=1280;
     private static final int DEFAULT_HEIGHT=800;
 
     public static JButton listButton=new JButton();
@@ -77,22 +76,19 @@ class  ViewFrame extends JFrame{
     private DefaultMutableTreeNode connNode;
     private DefaultMutableTreeNode dbNode;
     private DefaultMutableTreeNode tableNode;
-    private DefaultMutableTreeNode columnNode;
-    private DefaultMutableTreeNode[] itemNode=new DefaultMutableTreeNode[10];
+    private DefaultMutableTreeNode[] itemNode=new DefaultMutableTreeNode[3];
     private JPopupMenu connNodeMunu=new JPopupMenu();
     String connectingType;
     String connectingName;
     String connectingPsw;
     String connectingUrl;
-    Connection[] connecting=new Connection[1000];//记录所有connection
+    Connection[] connecting=new Connection[100];//记录所有connection
     int connectingCount=0;
     public static Connection firstConn;//新建的连接
 
-    private JSONArray updateInfo=new JSONArray();
-    private JSONObject updateObject=new JSONObject();
-    String[] updateSQL=new String[1000];
-    int[] sqlCount=new int[1000];
-    JTable[] tempTable=new JTable[100];
+    String[] updateSQL=new String[20];
+    int[] sqlCount=new int[20];
+    JTable[] tempTable=new JTable[20];
     String deleteSql=new String();
 
     private DefaultTreeCellRenderer render = new DefaultTreeCellRenderer();
@@ -101,7 +97,7 @@ class  ViewFrame extends JFrame{
     ImageIcon openIcon;
     ImageIcon closeIcon;
 
-    private JTable[] table=new JTable[100];
+    private JTable[] table=new JTable[20];
     private JTabbedPane tabbedPane=new JTabbedPane(JTabbedPane.TOP,JTabbedPane.WRAP_TAB_LAYOUT);
     private int nowTabIndex=-1;
 
@@ -111,6 +107,7 @@ class  ViewFrame extends JFrame{
 
 
     public ViewFrame(){
+        //界面初始化
         setSize(DEFAULT_WIDTH,DEFAULT_HEIGHT);
 
         String imgUrl="resources/img";
@@ -120,28 +117,28 @@ class  ViewFrame extends JFrame{
 //        console.setBounds(0,0,1400,300);
 
         ImageIcon listBg=new ImageIcon(imgUrl+"/3.jpg");
-        listBg.setImage(listBg.getImage().getScaledInstance(520,1100,Image.SCALE_DEFAULT));
+        listBg.setImage(listBg.getImage().getScaledInstance(300,650,Image.SCALE_DEFAULT));
         dbList.setIcon(listBg);
-        dbList.setBounds(0,0,520,1100);
+        dbList.setBounds(0,0,280,800);
         dbList.setOpaque(false);
 
 
         ImageIcon mainBg=new ImageIcon(imgUrl+"/4.jpg");
-        mainBg.setImage(mainBg.getImage().getScaledInstance(880,615,Image.SCALE_DEFAULT));
+        mainBg.setImage(mainBg.getImage().getScaledInstance(600,420,Image.SCALE_DEFAULT));
         mainView.setIcon(mainBg);
-        mainView.setBounds(280,100,1425,768);
+        mainView.setBounds(200,0,780,680);
 
 
-        mainPanel.setBounds(523,0,1425,1200);
+        mainPanel.setBounds(280,50,780,800);
         mainPanel.setOpaque(false);
         mainPanel.setLayout(null);
 
         listPanel.setLayout(null);
-        listPanel.setBounds(0,0,520,1100);
+        listPanel.setBounds(0,0,280,800);
         listPanel.setOpaque(false);
 
 
-        listScroll.setBounds(0,0,520,1025);
+        listScroll.setBounds(0,0,280,800);
         listScroll.setOpaque(false);
         listScroll.getViewport().setOpaque(false);
         listScroll.setBorder(null);
@@ -149,7 +146,7 @@ class  ViewFrame extends JFrame{
 
 //        Font tablefont=new Font(null);
 //        table.setFont(tablefont.deriveFont(Font.PLAIN,15));
-        tabbedPane.setBounds(0,0,1380,1000);
+        tabbedPane.setBounds(0,0,780,600);
         tabbedPane.setOpaque(false);
         tabbedPane.setBorder(null);
         tabbedPane.addChangeListener(event->{
@@ -173,7 +170,7 @@ class  ViewFrame extends JFrame{
         mainPanel.add(mainView);
 //        confirmTool.setSize(80,40);
 //        cancelTool.setSize(80,40);
-        toolBar.setBounds(0,985,200,40);
+        toolBar.setBounds(0,660,200,30);
 //        cancelTool.setEnabled(false);
 //        confirmTool.setEnabled(false);
         toolBar.setFloatable(false);
@@ -207,12 +204,10 @@ class  ViewFrame extends JFrame{
         tree.setOpaque(false);
         tree.setCellRenderer(render);
 
+        // 功能↓
 
         tree.addTreeSelectionListener(e->{
             TreePath path = e.getPath();
-//            TreePath[] paths = e.getPaths();
-//            TreePath newLeadPath = e.getNewLeadSelectionPath();
-//            TreePath oldLeadPath = e.getOldLeadSelectionPath();
             tree.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -240,11 +235,11 @@ class  ViewFrame extends JFrame{
         listScroll.setViewportView(tree);
         listPanel.add(dbList);//bgimg
 
-        allSplitPane.setBounds(0,0,1910,980);
+        allSplitPane.setBounds(0,0,1260,710);
         allSplitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         allSplitPane.setLeftComponent(listScroll);
         allSplitPane.setRightComponent(tabbedPane);
-        allSplitPane.setDividerLocation(0.275);
+        allSplitPane.setDividerLocation(0.22);
         allSplitPane.setDividerSize(5);
         allSplitPane.setOpaque(false);
         add(allSplitPane);
@@ -263,30 +258,30 @@ class  ViewFrame extends JFrame{
 //        JMenu func=new JMenu("函数");
 //        JMenu backup=new JMenu("备份");
         JMenu log=new JMenu("日志");
-        JMenu running=new JMenu("运行分析");
+//        JMenu running=new JMenu("运行分析");
         JMenu about=new JMenu("关于");
         menuBar.add(dbType);
-        menuBar.add(optimize);
         //menuBar.add(view);
         menuBar.add(sql);
         //menuBar.add(func);
         //menuBar.add(backup);
         menuBar.add(log);
-        menuBar.add(running);
+        menuBar.add(optimize);
+        //menuBar.add(running);
         menuBar.add(about);
 
-        JMenuItem localLog=new JMenuItem("查看MySQL日志");
-        JMenuItem lunaLog=new JMenuItem("查看Luna-SQL日志");
-        log.add(localLog);log.add(localLog);
+        JMenuItem generalLog=new JMenuItem("查看常规日志");
+        JMenuItem slowLog=new JMenuItem("查看慢日志");
+        JMenuItem errLog=new JMenuItem("错误日志");
 
-        JMenuItem optimizeConsole=new JMenuItem("优化控制台");
-        JMenuItem optListenPath=new JMenuItem("设置日志读取路径");
-        JMenuItem optimizeHistory=new JMenuItem("优化建议历史");
-        optimize.add(optimizeConsole);optimize.add(optListenPath);optimize.add(optimizeHistory);
+        log.add(generalLog);log.add(slowLog);log.add(errLog);
+        JMenuItem logConsole=new JMenuItem("日志控制台");
+        log.add(logConsole);
 
-        //JMenuItem oracle=new JMenuItem("Oracle");
+        JMenuItem optimization=new JMenuItem("分析优化");
+        optimize.add(optimization);
+
         JMenuItem mysql=new JMenuItem("Mysql");
-        //dbType.add(oracle);
         dbType.add(mysql);
 
         JMenuItem newQuery =new JMenuItem("自定义sql");
@@ -379,12 +374,28 @@ class  ViewFrame extends JFrame{
                 JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        logConsole.addActionListener(event->{
+            LogConsoleView logConsoleView=new LogConsoleView();
+            logConsoleView.logConsoleDriver(connecting[connectingCount]);
+        });
+
+        generalLog.addActionListener(event->{
+            LogReader logReader=new LogReader();
+            ResultSet logRs=null;
+            try {
+                logRs = logReader.getLog(0, connecting[connectingCount]);
+            }catch (NullPointerException e){
+                JOptionPane.showMessageDialog(null,"未连接数据库！","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            JScrollPane logPane=queryLog(logRs,++nowTabIndex);
+            tabbedPane.addTab("general_log",leafIcon2,logPane);
+            tabbedPane.setSelectedIndex(nowTabIndex);
+            tabbedPane.updateUI();
+        });
     }
     public static void getRs(ResultSet rs){
         ViewFrame.rs=rs;
-    }
-    public static ResultSet setRs(){
-        return rs;
     }
     public static void getConnName(String connName){
         ViewFrame.connName=connName;
@@ -475,20 +486,21 @@ class  ViewFrame extends JFrame{
             String str=temp.getUserObject().toString().split("-")[0];
             if(temp.toString().contains("--正在运行")) {
                 try {
-                    int testTemp=0;
+                    boolean isTemp=true;
                     for(int i=0;i<ReadInfo.readInfo().length();i++) {
                         if (ReadInfo.readInfo().getJSONObject(i).getString("connName").equals(str)) {
-                            testTemp=1;break;
+                            isTemp=false;break;
                         }
                     }
-                    if (testTemp==0){
+                    if (isTemp){//不保存的临时链接
                         root.remove(temp);
                         for(int i=connectingCount;i<connecting.length;i++){
-                            connecting[i]=connecting[i+1];
+                            if(connecting[i]==null) break;
+                            else connecting[i]=connecting[i+1];
                         }
                         tree.updateUI();
                     }
-                    else {
+                    else {//记录的链接
                         MysqlConn mysqlConn = new MysqlConn();
                         rs = mysqlConn.showDB(connecting[connectingCount]);
                         while (rs.next()) {
@@ -716,7 +728,7 @@ class  ViewFrame extends JFrame{
                             Update update=new Update();
                             try {
                                 update.update(updateSQL, connecting[connectingCount]);
-                                updateSQL=new String[1000];
+                                updateSQL=new String[100];
                                 tabRefresh(tabIndex);
                             }
                             catch (SQLException ex){
@@ -730,7 +742,7 @@ class  ViewFrame extends JFrame{
                         });
                         cancelTool[tabIndex].addActionListener(event->{
                             tabRefresh(tabIndex);
-                            updateSQL=new String[1000];
+                            updateSQL=new String[100];
                             confirmTool[tabIndex].setEnabled(false);
                             cancelTool[tabIndex].setEnabled(false);
                         });
@@ -843,7 +855,7 @@ class  ViewFrame extends JFrame{
                     n++;
                 }
                 tempTable[index] = new JTable(info, title1);
-                updateSQL = new String[1000];
+                updateSQL = new String[100];
                 confirmTool[index].setEnabled(false);
                 cancelTool[index].setEnabled(false);
                 deleteTool[index].setEnabled(false);
@@ -851,5 +863,41 @@ class  ViewFrame extends JFrame{
                 JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    private JScrollPane queryLog(ResultSet logRs,int tabIndex){
+        JScrollPane logPne=new JScrollPane();
+        try {
+            ResultSetMetaData rsmd1 = logRs.getMetaData();
+            int columnCount = rsmd1.getColumnCount();
+            logRs.last();
+            int rowCount = logRs.getRow();
+            logRs.beforeFirst();
+            Object[] title = new Object[columnCount];
+            Object[][] info = new Object[rowCount][columnCount];
+            Object[] title1 = new Object[columnCount];
+            Object[][] info1 = new Object[rowCount][columnCount];
+            for (int i = 1; i <= columnCount; i++) {
+                title[i - 1] = rsmd1.getColumnName(i);
+                title1[i - 1] = rsmd1.getColumnName(i);
+            }
+            int n = 0;
+            while (logRs.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    info[n][i - 1] = logRs.getString(i);
+                    info1[n][i - 1] = logRs.getString(i);
+                }
+                n++;
+            }
+            table[tabIndex]=new JTable(info,title);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        table[tabIndex].setRowHeight(20);
+        JTableHeader tableHeader = table[tabIndex].getTableHeader();
+        tableHeader.setResizingAllowed(true);
+        tableHeader.setReorderingAllowed(true);
+        table[tabIndex].setOpaque(false);
+        logPne.setViewportView(table[tabIndex]);
+        return logPne;
     }
 }

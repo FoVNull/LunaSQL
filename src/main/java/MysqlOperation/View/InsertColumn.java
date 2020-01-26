@@ -1,12 +1,12 @@
 package MysqlOperation.View;
 
 import MysqlOperation.domin.Define;
-import com.mysql.jdbc.Connection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
 
 public class InsertColumn {
     public void driver(Connection conn, String tableName, String dbName){

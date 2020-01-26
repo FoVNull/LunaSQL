@@ -2,13 +2,13 @@ package MysqlOperation.View;
 
 
 import MysqlOperation.domin.Insert;
-import com.mysql.jdbc.Connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
 import java.sql.ResultSet;
 
 public class InsertInfo {
@@ -19,7 +19,7 @@ public class InsertInfo {
     public JButton submit=new JButton("提交");
     private JScrollPane scrollPane=new JScrollPane();
     JSONArray insertArray=new JSONArray();
-    public void insert(ResultSet rs, Connection conn,String table, String dbName){
+    public void insert(ResultSet rs, Connection conn, String table, String dbName){
         try {
             rs.last();
             int columnCount=rs.getRow();

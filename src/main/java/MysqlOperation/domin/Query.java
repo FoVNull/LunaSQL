@@ -1,15 +1,15 @@
 package MysqlOperation.domin;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Query {
-    public ResultSet queryColumns(Connection conn, String dbName,String tableName)throws SQLException {
+    public ResultSet queryColumns(Connection conn, String dbName, String tableName)throws SQLException {
         String sql="select column_name from information_schema.columns where table_schema='"+dbName+"' and table_name='"+tableName+"';";
         ResultSet rs;
         PreparedStatement pst=(PreparedStatement)conn.prepareStatement(sql);

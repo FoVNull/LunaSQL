@@ -1,18 +1,14 @@
 package MysqlOperation.domin;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 
 import javax.swing.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Customize {
-    public ResultSet excuteSql(Connection conn,String sql) throws SQLException {
-        PreparedStatement pst=(PreparedStatement)conn.prepareStatement(sql);
+    public ResultSet excuteSql(Connection conn, String sql) throws SQLException {
+        PreparedStatement pst=conn.prepareStatement(sql);
         ResultSet rs=null;
         try {
             rs=pst.executeQuery();

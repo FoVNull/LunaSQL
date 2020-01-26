@@ -3,7 +3,6 @@ package MysqlOperation.View;
 import MysqlOperation.domin.Define;
 import MysqlOperation.domin.Delete;
 import MysqlOperation.domin.Query;
-import com.mysql.jdbc.Connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -32,7 +32,7 @@ public class TableStructure extends JRadioButton {
     public JSONObject infoObject=new JSONObject();
     public static JButton insertTrriger=new JButton();
 
-    public void driver(ResultSet rs, Connection conn,String tableName,String dbName)throws SQLException {
+    public void driver(ResultSet rs, Connection conn, String tableName, String dbName)throws SQLException {
         structurePanel.setLayout(new GridLayout(0,6,0,0));
         rs.last();
         int columnCount=rs.getRow();

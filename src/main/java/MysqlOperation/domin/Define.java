@@ -1,13 +1,13 @@
 package MysqlOperation.domin;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 import org.json.JSONArray;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Define {
-    public void alertStructure(JSONArray json, Connection conn,String tableName,String dbName)throws SQLException {
+    public void alertStructure(JSONArray json, Connection conn, String tableName, String dbName)throws SQLException {
         int columnCount=json.length();
         String[] columnName=new String[columnCount];
         String[] columnType=new String[columnCount];

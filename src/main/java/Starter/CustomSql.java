@@ -2,11 +2,11 @@ package Starter;
 
 import MysqlOperation.domin.Customize;
 import Starter.ViewFrame;
-import com.mysql.jdbc.Connection;
+
 
 import javax.swing.*;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+
+import java.sql.Connection;
 import java.sql.ResultSet;
 
 public class CustomSql{

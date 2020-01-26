@@ -5,12 +5,10 @@ import DBConn.MysqlConn;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.sql.Connection;
 import java.sql.ResultSet;
 
 import DBConn.SaveInfo;
-import com.mysql.jdbc.Connection;
 
 public class ConnViewer{
     JFrame frame1=new ConnViewerFrame();
@@ -119,17 +117,13 @@ class ConnViewerFrame extends JFrame {
                 tempConn.close();
             }
             catch (Exception e){
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                e.printStackTrace(pw);
-                if(sw.toString().contains("Access denied for user")){
+                if(e.getMessage().contains("Access denied for user")){
                     JOptionPane.showMessageDialog(null, "用户名或密码错误",title,JOptionPane.ERROR_MESSAGE);
                     //System.out.print(sw.toString());
                 }
                 else{
-                    //connTest.driver("地址错误",title);
                     JOptionPane.showMessageDialog(null, "地址错误", title, JOptionPane.ERROR_MESSAGE);
-                    //System.out.print(sw.toString());
+                    System.out.println(e.toString());
                 }
             }
         });
@@ -165,17 +159,13 @@ class ConnViewerFrame extends JFrame {
                         this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING) );
                     }
                 } catch (Exception e) {
-                    StringWriter sw = new StringWriter();
-                    PrintWriter pw = new PrintWriter(sw);
-                    e.printStackTrace(pw);
-                    if (sw.toString().contains("Access denied for user")) {
+                    if (e.getMessage().contains("Access denied for user")) {
                         //connTest.driver("用户名或密码错误", title);
                         //System.out.print(sw.toString());
                         JOptionPane.showMessageDialog(null, "用户名或密码错误", " ", JOptionPane.ERROR_MESSAGE);
                     } else {
                         //connTest.driver("地址错误", title);
                         JOptionPane.showMessageDialog(null, "地址错误", " ", JOptionPane.ERROR_MESSAGE);
-                        System.out.print(sw.toString());
                     }
                 }
             }

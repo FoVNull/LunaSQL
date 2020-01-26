@@ -1,6 +1,5 @@
 package DBConn;
 
-import ErrorInfo.ConnTest;
 
 import java.io.*;
 
