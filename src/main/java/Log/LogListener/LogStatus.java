@@ -64,4 +64,47 @@ public class LogStatus {
         }
         return " ";
     }
+
+    public void editGLog(Connection conn,String now){
+        String changeStatus="SET GLOBAL general_log="+now;
+        try{
+            PreparedStatement pst=conn.prepareStatement(changeStatus);
+            pst.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public void editSLog(Connection conn,String now){
+        String changeStatus="SET GLOBAL slow_query_log="+now;
+        try{
+            PreparedStatement pst=conn.prepareStatement(changeStatus);
+            pst.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public void editGInfo(Connection conn,String type,String root){
+        String changeType="SET GLOBAL log_output='"+type+"'";
+        String changeRoot="SET GLOBAL general_log_file='"+root+"'";
+        try{
+            PreparedStatement pst=conn.prepareStatement(changeType);
+            pst.executeUpdate();
+            pst=conn.prepareStatement(changeRoot);
+            pst.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public void editSInfo(Connection conn,String time,String root){
+        String changeTime="SET GLOBAL slow_launch_time="+time;
+        String changeRoot="SET GLOBAL slow_query_log_file='"+root+"'";
+        try{
+            PreparedStatement pst=conn.prepareStatement(changeTime);
+            pst.executeUpdate();
+            pst=conn.prepareStatement(changeRoot);
+            pst.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
