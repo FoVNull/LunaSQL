@@ -384,7 +384,7 @@ class  ViewFrame extends JFrame{
             LogReader logReader=new LogReader();
             ResultSet logRs=null;
             try {
-                logRs = logReader.getLog(0, connecting[connectingCount]);
+                logRs = logReader.getGLog(connecting[connectingCount]);
             }catch (NullPointerException e){
                 JOptionPane.showMessageDialog(null,"未连接数据库！","Error",JOptionPane.ERROR_MESSAGE);
             }
@@ -392,6 +392,15 @@ class  ViewFrame extends JFrame{
             tabbedPane.addTab("general_log",leafIcon2,logPane);
             tabbedPane.setSelectedIndex(nowTabIndex);
             tabbedPane.updateUI();
+        });
+
+        slowLog.addActionListener(event->{
+            LogReader logReader=new LogReader();
+            logReader.getSLog(connecting[connectingCount]);
+        });
+
+        errLog.addActionListener(event->{
+            LogReader logReader=new LogReader();
         });
     }
     public static void getRs(ResultSet rs){
@@ -874,17 +883,13 @@ class  ViewFrame extends JFrame{
             logRs.beforeFirst();
             Object[] title = new Object[columnCount];
             Object[][] info = new Object[rowCount][columnCount];
-            Object[] title1 = new Object[columnCount];
-            Object[][] info1 = new Object[rowCount][columnCount];
             for (int i = 1; i <= columnCount; i++) {
                 title[i - 1] = rsmd1.getColumnName(i);
-                title1[i - 1] = rsmd1.getColumnName(i);
             }
             int n = 0;
             while (logRs.next()) {
                 for (int i = 1; i <= columnCount; i++) {
                     info[n][i - 1] = logRs.getString(i);
-                    info1[n][i - 1] = logRs.getString(i);
                 }
                 n++;
             }
