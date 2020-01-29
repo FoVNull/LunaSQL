@@ -401,6 +401,7 @@ class  ViewFrame extends JFrame{
 
         errLog.addActionListener(event->{
             LogReader logReader=new LogReader();
+            logReader.getELog(connecting[connectingCount]);
         });
     }
     public static void getRs(ResultSet rs){

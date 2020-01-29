@@ -89,12 +89,14 @@ public class LogConsoleView {
             logConsoleDriver(conn);
         });
         panel.add(new JLabel());panel.add(sEditB);
+        panel.add(new JLabel());panel.add(new JLabel());
 
         String errLoc=logStatus.searchELog(conn);
-        panel.add(new JLabel("错误日志路径："+errLoc));
+        panel.add(new JLabel("错误日志路径(请在my.ini中修改)：",JLabel.CENTER));
+        panel.add(new JScrollPane(new JLabel(errLoc)));
 
         jFrame.add(panel);
-        jFrame.setSize(500,400);
+        jFrame.setSize(500,450);
         jFrame.setTitle("日志控制台");
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
