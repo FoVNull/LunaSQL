@@ -28,7 +28,12 @@ public class LogReader {
                 return rs;
             }else{
                 try {
-                    Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe "+track);
+                    if(track.substring(0,4).equals("/var")){
+                        GetVar getVar=new GetVar();
+                        Runtime.getRuntime().exec(getVar.getVarRoot(track,conn));
+                    }else {
+                        Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + track);
+                    }
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(
                             null,ioe.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -48,12 +53,15 @@ public class LogReader {
             pst.executeQuery();
             ResultSet rs;
             rs = pst.executeQuery();
-            rs.next();
-            rs.next();String status=rs.getString(2);
-            rs.next();String root=rs.getString(2);
-
+            rs.next();rs.next();rs.next();
+            String root=rs.getString(2);
             try {
-                Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + root);
+                if(root.substring(0,4).equals("/var")) {
+                    GetVar getVar=new GetVar();
+                    Runtime.getRuntime().exec(getVar.getVarRoot(root,conn));
+                }else {
+                    Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + root);
+                }
             }catch(IOException e){
                 JOptionPane.showMessageDialog(
                         null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -70,14 +78,21 @@ public class LogReader {
             ResultSet rs=pst.executeQuery();
             rs.next();String root=rs.getString(2);
             try {
-                Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + root);
+                if(root.substring(0,4).equals("/var")) {
+                    GetVar getVar=new GetVar();
+                    Runtime.getRuntime().exec(getVar.getVarRoot(root,conn));
+                }else {
+                    Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + root);
+                }
             }catch (IOException e){
                 JOptionPane.showMessageDialog(
                         null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
         }catch (SQLException e){
-
+            JOptionPane.showMessageDialog(
+                    null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 }
