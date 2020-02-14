@@ -6,23 +6,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 
 public class SettingEdit {
 
-    public String[] paraQuery(Connection conn){
-        String[] res=new String[6];
+    public Map<String,String> paraQuery(Connection conn){
+        Map<String,String> res=new LinkedHashMap<>();
         String[] sql= {"show variables like 'table_open_cache'",
                 "show status like 'Open_tables'",
                 "show status like 'Opened_tables'",
                 "show variables like 'innodb_flush_log_at_trx_commit'",
                 "show variables like 'innodb_lock_wait_timeout'",
-                "show variables like 'innodb_log_buffer_size'"
+                "show variables like 'innodb_log_buffer_size'",
+                "show variables like 'key_buffer_size'",
+                "show variables like 'join_buffer_size'",
+                "show variables like 'read_buffer_size'",
+                "show variables like 'sort_buffer_size'",
+                "show variables like 'binlog_cache_size'",
+                "show variables like 'sync_binlog'"
         };
-        for(int i=0;i<6;++i){
+        for(int i=0;i<12;++i){
             try{
                 PreparedStatement pst=conn.prepareStatement(sql[i]);
                 ResultSet rs=pst.executeQuery();
-                rs.next();res[i]=rs.getString(2);
+                rs.next();
+                res.put(rs.getString(1),rs.getString(2));
             }catch (SQLException e){
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(
@@ -32,12 +40,13 @@ public class SettingEdit {
         return res;
     }
 
-    public void editPara(Connection conn,String...paras){
-        String[] sql=new String[4];
-        sql[0]="set global table_open_cache="+paras[0];
-        sql[1]="set global innodb_flush_log_at_trx_commit="+paras[1];
-        sql[2]="set global innodb_lock_wait_timeout="+paras[2];
-        sql[3]="set global innodb_log_buffer_size="+paras[3];
+    public void editPara(Connection conn,Map<String,String> paras){
+        String[] sql=new String[10];
+        int p=0;
+        for(Map.Entry<String,String> entry:paras.entrySet()){
+            sql[p]="set global "+entry.getKey()+" = "+entry.getValue();
+            ++p;
+        }
         for(String s:sql) {
             try {
                 PreparedStatement pst = conn.prepareStatement(s);
