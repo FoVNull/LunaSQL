@@ -10,17 +10,17 @@ import java.util.LinkedHashMap;
 public class TestThread{
     int i;
 
-    public LinkedHashMap<Integer,int[]> initTest(String[] sql,Connection conn){
-        LinkedHashMap<Integer,int[]> res=new LinkedHashMap<>();
+    public LinkedHashMap<Integer,String[]> initTest(String[] sql,Connection conn){
+        LinkedHashMap<Integer,String[]> res=new LinkedHashMap<>();
         for(int j=0;j<sql.length;++j){
-            int[] temp=run(conn,sql[j],j);
+            String[] temp=run(conn,sql[j],j);
             res.put(j,temp);
         }
         return res;
     }
 
-    public int[] run(Connection conn,String sql,int type){
-        int[] res=new int[2];
+    public String[] run(Connection conn,String sql,int type){
+        String[] res=new String[3];
         JProgressBar jpb=new JProgressBar(0,100);
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
@@ -39,6 +39,7 @@ public class TestThread{
         jFrame.setResizable(false);
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
+        int n=0;
         for(i=0;i<100;++i) {
             jpb.setValue(i);
             try {
@@ -46,16 +47,18 @@ public class TestThread{
                 PreparedStatement pst = conn.prepareStatement(sql);
                 pst.executeQuery();
                 long y = System.currentTimeMillis();
-                res[1]+=y-x;
+                n+=y-x;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         i=0;
-        res[1]=res[1]/100;
+        n/=100;
+        res[1]=n+"";
         EvaluationIO eio=new EvaluationIO();
         String[] t=eio.readLast();
-        res[0]=Integer.parseInt(t[type]);
+        res[0]=t[type];
+        res[2]=t[4];
         jFrame.dispose();
         return res;
     }

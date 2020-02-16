@@ -14,7 +14,7 @@ public class MainThread extends Thread {
     @Override
     public void run(){
         TestThread testThread=new TestThread();
-        LinkedHashMap res=testThread.initTest(sql,conn);
+        LinkedHashMap<Integer,String[]> res=testThread.initTest(sql,conn);
         ParaEvaluation paraEvaluation=new ParaEvaluation();
         paraEvaluation.showRes(res);
     }
