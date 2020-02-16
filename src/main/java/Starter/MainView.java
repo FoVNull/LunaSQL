@@ -2,12 +2,15 @@ package Starter;
 
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
-import Log.LogListener.LogReader;
+import Optimization.LogAnalyses.domin.LogReader;
+import Optimization.LogAnalyses.View.LogConsoleView;
+import Optimization.ParameterOpt.View.ParameterView;
 import MysqlOperation.View.TableStructure;
 import MysqlOperation.domin.Delete;
 import MysqlOperation.View.InsertInfo;
 import MysqlOperation.domin.Query;
 import MysqlOperation.domin.Update;
+import Optimization.ParameterOpt.domin.ParaEvaluation;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -278,8 +281,15 @@ class  ViewFrame extends JFrame{
         JMenuItem logConsole=new JMenuItem("日志控制台");
         log.add(logConsole);
 
-        JMenuItem optimization=new JMenuItem("分析优化");
-        optimize.add(optimization);
+        JMenuItem parameterEdit=new JMenuItem("参数优化");
+        JMenuItem autoPara=new JMenuItem("参数性能评估");
+        JMenuItem slowOpm=new JMenuItem("慢日志分析");
+        JMenuItem glogOpm=new JMenuItem("查询日志分析");
+        JMenuItem overWrite=new JMenuItem("sql重写");
+        optimize.add(parameterEdit);
+        optimize.add(autoPara);
+        optimize.add(slowOpm);optimize.add(glogOpm);
+        optimize.add(overWrite);
 
         JMenuItem mysql=new JMenuItem("Mysql");
         dbType.add(mysql);
@@ -376,11 +386,17 @@ class  ViewFrame extends JFrame{
         });
 
         logConsole.addActionListener(event->{
-            LogConsoleView logConsoleView=new LogConsoleView();
+            if(connectingCount>0) JOptionPane.showMessageDialog(null,
+                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
+                    "注意",JOptionPane.WARNING_MESSAGE);
+            LogConsoleView logConsoleView = new LogConsoleView();
             logConsoleView.logConsoleDriver(connecting[connectingCount]);
         });
 
         generalLog.addActionListener(event->{
+            if(connectingCount>0) JOptionPane.showMessageDialog(null,
+                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
+                    "注意",JOptionPane.WARNING_MESSAGE);
             LogReader logReader=new LogReader();
             ResultSet logRs=null;
             try {
@@ -395,13 +411,41 @@ class  ViewFrame extends JFrame{
         });
 
         slowLog.addActionListener(event->{
+            if(connectingCount>0) JOptionPane.showMessageDialog(null,
+                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
+                    "注意",JOptionPane.WARNING_MESSAGE);
             LogReader logReader=new LogReader();
             logReader.getSLog(connecting[connectingCount]);
         });
 
         errLog.addActionListener(event->{
+            if(connectingCount>0) JOptionPane.showMessageDialog(null,
+                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
+                    "注意",JOptionPane.WARNING_MESSAGE);
             LogReader logReader=new LogReader();
             logReader.getELog(connecting[connectingCount]);
+        });
+
+        parameterEdit.addActionListener(event->{
+            if(connectingCount>0) JOptionPane.showMessageDialog(null,
+                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
+                    "注意",JOptionPane.WARNING_MESSAGE);
+            ParameterView parameterView=new ParameterView();
+            parameterView.paraDriver(connecting[connectingCount]);
+        });
+
+        autoPara.addActionListener(event->{
+            if(connectingCount>0) JOptionPane.showMessageDialog(null,
+                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
+                    "注意",JOptionPane.WARNING_MESSAGE);
+            int res=JOptionPane.showConfirmDialog(null,
+                    "<html>性能评估只针对key_buffer_size,join_buffer_size,read_buffer_size,sort_buffer_size" +
+                            "<br>更多参数优化需要人工调整。这个过程可能会花费一点时间，是否开始？</html>",
+                    "性能评估",2);
+            if(res==0){
+                ParaEvaluation ao=new ParaEvaluation();
+                ao.autoTest(connecting[connectingCount]);
+            }
         });
     }
     public static void getRs(ResultSet rs){
@@ -462,18 +506,15 @@ class  ViewFrame extends JFrame{
                         connectingType=ReadInfo.readInfo().getJSONObject(i).getString("type");
                     }
                 }
-                switch (connectingType) {
-                    case "mysql": {
-                        MysqlConn mysqlConn = new MysqlConn();
-                        connectingCount = temp.getParent().getIndex(temp);
-                        try {
-                            connecting[connectingCount] = mysqlConn.conn(connectingUrl, connectingName, connectingPsw);
-                            rs = mysqlConn.showDB(connecting[connectingCount]);
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
+                MysqlConn mysqlConn = new MysqlConn();
+                connectingCount = temp.getParent().getIndex(temp);
+                try {
+                    connecting[connectingCount] = mysqlConn.conn(connectingUrl, connectingName, connectingPsw);
+                    rs = mysqlConn.showDB(connecting[connectingCount]);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
+
                 try {
                     while (rs.next()) {
                         dbNode=new DefaultMutableTreeNode(rs.getString("Database"));

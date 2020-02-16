@@ -5,7 +5,7 @@ import org.json.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.logging.Logger;
+import java.io.IOException;
 
 public class ReadInfo {
 //    public static void main(String[] args){
@@ -31,7 +31,7 @@ public class ReadInfo {
             }
             br.close();
             urlObject.put("url", urlArray);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return urlArray;
