@@ -1,4 +1,6 @@
-package Optimization.ParameterOpt.domin;
+package Optimization.ParameterOpt.Service;
+
+import Optimization.ParameterOpt.View.ParaEvaluation;
 
 import java.sql.Connection;
 import java.util.LinkedHashMap;
@@ -16,6 +18,6 @@ public class MainThread extends Thread {
         TestThread testThread=new TestThread();
         LinkedHashMap<Integer,String[]> res=testThread.initTest(sql,conn);
         ParaEvaluation paraEvaluation=new ParaEvaluation();
-        paraEvaluation.showRes(res);
+        paraEvaluation.showRes(res,conn);
     }
 }
