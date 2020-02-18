@@ -12,13 +12,7 @@ import java.util.Map;
 
 public class ParaEvaluation {
 
-    public void autoTest(Connection conn){
-
-        String[] sql={"SELECT * FROM information_schema.`COLUMNS` c JOIN information_schema.`TABLES` t ON c.TABLE_NAME=t.TABLE_NAME",
-                "SELECT * FROM information_schema.`COLUMNS`",
-                "SELECT * FROM information_schema.`COLUMNS`",
-                "SELECT * FROM information_schema.`COLUMNS`"
-        };
+    public void autoTest(Connection conn,String[] sql){
 
         MainThread mThread=new MainThread(conn,sql);
         mThread.start();
