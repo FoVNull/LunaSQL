@@ -12,11 +12,17 @@ import java.util.LinkedHashMap;
 public class TestThread{
     int i;
 
-    public LinkedHashMap<Integer,String[]> initTest(String[] sql,Connection conn){
+    public LinkedHashMap<Integer,String[]> initTest(String[] sql,Connection conn,int testType){
         LinkedHashMap<Integer,String[]> res=new LinkedHashMap<>();
         for(int j=0;j<sql.length;++j){
-            String[] temp=run(conn,sql[j],j);
-            res.put(j,temp);
+            if(!sql[j].equals("NAN")) {
+                String[] temp = run(conn, sql[j], j);
+                if(i==200) return null;
+                res.put(j, temp);
+            }
+        }
+        if(testType==0){
+            for(int i=1;i<4;++i) res.put(i,res.get(0));
         }
         return res;
     }
@@ -29,14 +35,14 @@ public class TestThread{
         JButton cancel=new JButton("终止");
         panel.add(new JLabel("请稍后..."));
         cancel.addActionListener(event->{
-            i=200;jFrame.dispose();
+            i=200;
         });
         panel.add(jpb);
         panel.add(cancel);
         jFrame.add(panel);
         jFrame.setSize(275,100);
         int typex=type+1;
-        jFrame.setTitle("参数 "+typex+"/4");
+        jFrame.setTitle("用例 "+typex);
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setResizable(false);
         jFrame.setLocationRelativeTo(null);
@@ -51,7 +57,9 @@ public class TestThread{
                 long y = System.currentTimeMillis();
                 n+=y-x;
             } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null,e.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
+                break;
             }
         }
         i=0;

@@ -1,5 +1,7 @@
 package Optimization.ParameterOpt.View;
 
+import Optimization.ParameterOpt.domin.EvaluationIO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
@@ -15,30 +17,61 @@ public class CaseCustomize {
         String[] paraName={"join_buffer_size","read_buffer_size","sort_buffer_size","key_buffer_size"};
         JTextArea[] jTextArea=new JTextArea[4];
 
-        panel.add(new JLabel("若只需要使用一个测试语句，填写第一个参数语句提交即可"));
+        panel.add(new JLabel("语句可以为空"));
+
+        EvaluationIO eios=new EvaluationIO();
+        String[] userCase=eios.readUserCase();
 
         for(int i=0;i<4;++i){
             panel.add(new JLabel(paraName[i]));
             jTextArea[i]=new JTextArea();
+            if(!userCase[i].equals("NAN")) jTextArea[i].setText(userCase[i]);
             panel.add(jTextArea[i]);
         }
 
         JButton confirm=new JButton("提交");
+        JCheckBox ifSave=new JCheckBox();
+        ifSave.setText("是否保存当前用例语句，以便下次快捷使用");
+        ifSave.setSelected(true);
+
 
         confirm.addActionListener(event->{
+            int flag=0;
             String[] sql=new String[4];
             for(int i=0;i<4;++i){
                 sql[i]=jTextArea[i].getText();
+                if(sql[i].equals("")) {++flag; sql[i]="NAN";};
             }
-            ParaEvaluation paraEvaluation=new ParaEvaluation();
-            paraEvaluation.autoTest(conn,sql);
-        });
+            if(flag==4){
+                JOptionPane.showMessageDialog(null,"请至少输入1条语句",
+                        "语句为空",JOptionPane.ERROR_MESSAGE);
+            }else {
+                if(ifSave.isSelected()){
+                    EvaluationIO eio=new EvaluationIO();
+                    eio.saveUserCase(sql);
+                }
+                ParaEvaluation paraEvaluation = new ParaEvaluation();
+                paraEvaluation.autoTest(conn, sql,1);
+                jFrame.dispose();
+            }
 
-        JCheckBox ifSave=new JCheckBox();
-        ifSave.setText("是否保存当前用例语句，以便下次快捷使用");
+        });
 
         panel.add(ifSave);
         panel.add(confirm);
+
+        JButton setDefault=new JButton("更改默认语句并提交运行");
+        JTextArea defaultSQL=new JTextArea();
+
+        setDefault.addActionListener(event->{
+            EvaluationIO eio=new EvaluationIO();
+            eio.setDefault(defaultSQL.getText());
+            ParaEvaluation paraEvaluation = new ParaEvaluation();
+            paraEvaluation.autoTest(conn, new String[]{defaultSQL.getText()},0);
+            jFrame.dispose();
+        });
+
+        panel.add(defaultSQL);panel.add(setDefault);
 
         jFrame.add(panel);
         jFrame.setSize(400,650);

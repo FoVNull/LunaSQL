@@ -12,6 +12,7 @@ import MysqlOperation.View.InsertInfo;
 import MysqlOperation.domin.Query;
 import MysqlOperation.domin.Update;
 import Optimization.ParameterOpt.View.ParaEvaluation;
+import Optimization.ParameterOpt.domin.EvaluationIO;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -435,6 +436,8 @@ class  ViewFrame extends JFrame{
             parameterView.paraDriver(connecting[connectingCount]);
         });
 
+        EvaluationIO eios=new EvaluationIO();
+        eios.readDefault();
         autoPara.addActionListener(event->{
             if(connectingCount>0) JOptionPane.showMessageDialog(null,
                     "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
@@ -448,12 +451,11 @@ class  ViewFrame extends JFrame{
                     "性能评估", 2);
             if(evaType==0) {
                 if (res == 0) {
-                    String[] inputSql=new String[4];
-                    for(int i=0;i<4;++i) {
-                        inputSql[i] = "SELECT * FROM information_schema.`COLUMNS` c JOIN information_schema.`TABLES` t ON c.TABLE_NAME=t.TABLE_NAME ORDER BY c.ORDINAL_POSITION";
-                    }
+                    String[] inputSql=new String[1];
+                    EvaluationIO eio=new EvaluationIO();
+                    inputSql[0] = eio.readDefault();
                     ParaEvaluation ao = new ParaEvaluation();
-                    ao.autoTest(connecting[connectingCount],inputSql);
+                    ao.autoTest(connecting[connectingCount],inputSql,0);
                 }
             }else{
                 CaseCustomize caseCustomize=new CaseCustomize();
