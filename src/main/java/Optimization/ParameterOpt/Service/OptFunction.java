@@ -9,15 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
-public class TestThread{
-    int i;
+public class OptFunction {
+    int i;int flag;
 
     public LinkedHashMap<Integer,String[]> initTest(String[] sql,Connection conn,int testType){
         LinkedHashMap<Integer,String[]> res=new LinkedHashMap<>();
         for(int j=0;j<sql.length;++j){
             if(!sql[j].equals("NAN")) {
                 String[] temp = run(conn, sql[j], j);
-                if(i==200) return null;
+                if(flag==1) {res.clear();return res;}
                 res.put(j, temp);
             }
         }
@@ -28,6 +28,7 @@ public class TestThread{
     }
 
     public String[] run(Connection conn,String sql,int type){
+        flag=0;
         String[] res=new String[3];
         JProgressBar jpb=new JProgressBar(0,100);
         JFrame jFrame=new JFrame();
@@ -35,7 +36,7 @@ public class TestThread{
         JButton cancel=new JButton("终止");
         panel.add(new JLabel("请稍后..."));
         cancel.addActionListener(event->{
-            i=200;
+            i=200;flag=1;
         });
         panel.add(jpb);
         panel.add(cancel);

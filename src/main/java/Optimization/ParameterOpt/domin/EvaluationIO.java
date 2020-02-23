@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class EvaluationIO {
-    public static void main(String...args){
-        EvaluationIO eio=new EvaluationIO();
-        eio.saveUserCase(new String[]{"1","2","3","4"});
-    }
+//    public static void main(String...args){
+//        EvaluationIO eio=new EvaluationIO();
+//        eio.saveUserCase(new String[]{"1","2","3","4"});
+//    }
     public String[] readLast(){
         File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "Evaluation.csv");
         try {

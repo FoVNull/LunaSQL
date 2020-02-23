@@ -46,13 +46,16 @@ public class CaseCustomize {
                 JOptionPane.showMessageDialog(null,"请至少输入1条语句",
                         "语句为空",JOptionPane.ERROR_MESSAGE);
             }else {
+                ParaEvaluation paraEvaluation = new ParaEvaluation();
+                paraEvaluation.autoTest(conn, sql,1);
+
                 if(ifSave.isSelected()){
                     EvaluationIO eio=new EvaluationIO();
                     eio.saveUserCase(sql);
                 }
-                ParaEvaluation paraEvaluation = new ParaEvaluation();
-                paraEvaluation.autoTest(conn, sql,1);
+
                 jFrame.dispose();
+
             }
 
         });
@@ -64,10 +67,10 @@ public class CaseCustomize {
         JTextArea defaultSQL=new JTextArea();
 
         setDefault.addActionListener(event->{
-            EvaluationIO eio=new EvaluationIO();
-            eio.setDefault(defaultSQL.getText());
             ParaEvaluation paraEvaluation = new ParaEvaluation();
             paraEvaluation.autoTest(conn, new String[]{defaultSQL.getText()},0);
+            EvaluationIO eio=new EvaluationIO();
+            eio.setDefault(defaultSQL.getText());
             jFrame.dispose();
         });
 

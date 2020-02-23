@@ -7,7 +7,7 @@ import Optimization.ParameterOpt.domin.SettingEdit;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ParaEvaluation {
@@ -18,7 +18,7 @@ public class ParaEvaluation {
         mThread.start();
     }
 
-    public void showRes(LinkedHashMap<Integer, String[]> value,Connection conn){
+    public void showRes(HashMap<Integer, String[]> value,Connection conn){
         for(int i=0;i<4;++i){
             if(!value.containsKey(i)) value.put(i,new String[]{"0","1","null"});
         }
