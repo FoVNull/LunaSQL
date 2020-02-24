@@ -2,6 +2,7 @@ package Starter;
 
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
+import MysqlOperation.domin.Script;
 import Optimization.LogAnalyses.domin.LogReader;
 import Optimization.LogAnalyses.View.LogConsoleView;
 import Optimization.ParameterOpt.View.CaseCustomize;
@@ -18,15 +19,18 @@ import Optimization.ParameterOpt.domin.EvaluationIO;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.JTableHeader;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.List;
 
 public class MainView {
     public static void main(String[] args){
@@ -117,10 +121,6 @@ class  ViewFrame extends JFrame{
         setSize(DEFAULT_WIDTH,DEFAULT_HEIGHT);
 
         String imgUrl="resources/img";
-//        ImageIcon consoleBg=new ImageIcon(imgUrl+"/6.jpg");
-//        consoleBg.setImage(consoleBg.getImage().getScaledInstance(1400,300,Image.SCALE_DEFAULT));
-//        console.setIcon(consoleBg);
-//        console.setBounds(0,0,1400,300);
 
         ImageIcon listBg=new ImageIcon(imgUrl+"/3.jpg");
         listBg.setImage(listBg.getImage().getScaledInstance(300,650,Image.SCALE_DEFAULT));
@@ -160,7 +160,6 @@ class  ViewFrame extends JFrame{
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if(e.isMetaDown()) {
-                        //System.out.println(tabbedPane.getSelectedIndex());
                         showTabMenu(e.getX(),e.getY(),tabbedPane.getSelectedIndex());
                     }
                 }
@@ -356,6 +355,39 @@ class  ViewFrame extends JFrame{
             }
         });
 
+        openQuery.addActionListener(event->{
+            JFileChooser jfc=new JFileChooser();
+            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            FileFilter fft=new FileFilter(){
+                @Override
+                public boolean accept(File file){
+                    return file.getName().endsWith("sql");
+                }
+
+                @Override
+                public String getDescription(){
+                    return "需要sql文件(*.sql)";
+                }
+            };
+
+            jfc.setFileFilter(fft);
+            jfc.showOpenDialog(null);
+            File inputPath=jfc.getSelectedFile();
+            if(inputPath!=null) {
+                Script script=new Script();
+                try {
+                    List<ResultSet> scSql=script.multiEx(inputPath, connecting[connectingCount]);
+                    for(ResultSet r:scSql){
+                        JScrollPane logPane=queryLog(r,++nowTabIndex);
+                        tabbedPane.addTab("general_log",leafIcon2,logPane);
+                    }
+                }catch (SQLException e){
+                    JOptionPane.showMessageDialog(null,e.getMessage(),
+                            "Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
 
         news.addActionListener(event->{
             JOptionPane.showMessageDialog(
@@ -387,6 +419,7 @@ class  ViewFrame extends JFrame{
                 JOptionPane.showMessageDialog(null,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
+
 
         logConsole.addActionListener(event->{
             if(connectingCount>0) JOptionPane.showMessageDialog(null,
@@ -964,6 +997,11 @@ class  ViewFrame extends JFrame{
         tableHeader.setReorderingAllowed(true);
         table[tabIndex].setOpaque(false);
         logPne.setViewportView(table[tabIndex]);
+
+        confirmTool[nowTabIndex]=new JButton("提交修改");
+        cancelTool[nowTabIndex]=new JButton("取消");
+        deleteTool[nowTabIndex]=new JButton("删除选定记录");
+
         return logPne;
     }
 }
