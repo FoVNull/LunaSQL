@@ -25,6 +25,8 @@ public class CaseCustomize {
         for(int i=0;i<4;++i){
             panel.add(new JLabel(paraName[i]));
             jTextArea[i]=new JTextArea();
+            jTextArea[i].setLineWrap(true);        //激活自动换行功能
+            jTextArea[i].setWrapStyleWord(true); // 激活断行不断字功能
             if(!userCase[i].equals("NAN")) jTextArea[i].setText(userCase[i]);
             panel.add(jTextArea[i]);
         }

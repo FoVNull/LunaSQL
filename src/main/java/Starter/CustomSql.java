@@ -18,6 +18,8 @@ public class CustomSql{
         panel=new JPanel();
         sql=new JTextArea(25,58);
         sql.setTabSize(4);
+        sql.setLineWrap(true);        //激活自动换行功能
+        sql.setWrapStyleWord(true); // 激活断行不断字功能
         excute=new JButton("执行");
         panel.add(sql);
         panel.add(excute);

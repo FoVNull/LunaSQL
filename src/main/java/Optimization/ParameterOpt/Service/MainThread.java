@@ -25,13 +25,13 @@ public class MainThread extends Thread {
             OptFunction optFunction = new OptFunction();
             HashMap<Integer, String[]> res = optFunction.initTest(sql, conn, testType);
             if(!res.isEmpty()) {
-                //ParaEvaluation paraEvaluation = new ParaEvaluation();
-                //paraEvaluation.showRes(res, conn);
+                ParaEvaluation paraEvaluation = new ParaEvaluation();
+                paraEvaluation.showRes(res, conn);
             }
         }else {
             multiSql();
-            //ParaEvaluation paraEvaluation = new ParaEvaluation();
-            //paraEvaluation.showRes(map, conn);
+            ParaEvaluation paraEvaluation = new ParaEvaluation();
+            paraEvaluation.showRes(map, conn);
         }
     }
 

@@ -4,7 +4,6 @@ import MysqlOperation.domin.Script;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import java.awt.*;
 import java.io.File;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -17,6 +16,8 @@ public class MultiCases {
         JPanel panel=new JPanel();
 
         JTextArea sql=new JTextArea();
+        sql.setLineWrap(true);        //激活自动换行功能
+        sql.setWrapStyleWord(true); // 激活断行不断字功能
         JButton commit=new JButton("提交");
         JButton script=new JButton("导入sql脚本");
 
