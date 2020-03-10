@@ -17,12 +17,7 @@ import java.sql.SQLException;
 public class TableStructure extends JRadioButton {
     private JFrame frame = new JFrame();
     private JPanel structurePanel=new JPanel();
-    private JTextField[] columnName=new JTextField[100];
     ButtonGroup bg = new ButtonGroup();
-    private JRadioButton[] pk=new JRadioButton[100];
-    private JCheckBox[] ifNull=new JCheckBox[100];
-    private JComboBox[] columnType=new JComboBox[100];
-    private JTextField[] columnLength=new JTextField[100];
     private JButton confirm=new JButton("提交更改");
     private JButton clear=new JButton("清除选择");
     private JButton add=new JButton("新建字段");
@@ -31,11 +26,22 @@ public class TableStructure extends JRadioButton {
     public static JButton insertTrriger=new JButton();
 
     public void driver(ResultSet rs, Connection conn, String tableName, String dbName)throws SQLException {
-        structurePanel.setLayout(new GridLayout(0,6,0,0));
+        structurePanel.setLayout(new GridLayout(0,9,0,0));
         rs.last();
         int columnCount=rs.getRow();
         JButton[] delete=new JButton[columnCount];
         rs.beforeFirst();
+
+        JTextField[] columnName=new JTextField[columnCount];
+        JRadioButton[] pk=new JRadioButton[columnCount];
+        JCheckBox[] ifNull=new JCheckBox[columnCount];
+        JComboBox[] columnType=new JComboBox[columnCount];
+        JTextField[] columnLength=new JTextField[columnCount];
+
+        JButton[] indexEx=new JButton[columnCount];
+        JTextField[] indexName=new JTextField[columnCount];
+        JCheckBox[] ifNonUniq=new JCheckBox[columnCount];
+
         JLabel colNameLabel=new JLabel("字段");
         JLabel pkLabel=new JLabel("PK");
         JLabel ifNullLabel=new JLabel("默认是否为空");
@@ -47,13 +53,17 @@ public class TableStructure extends JRadioButton {
         structurePanel.add(pkLabel);
         structurePanel.add(ifNullLabel);
         structurePanel.add(new JLabel(""));
+        structurePanel.add(new JLabel("索引名"));
+        structurePanel.add(new JLabel("是否为唯一索引"));
+        structurePanel.add(new JLabel(""));
 
         Query query=new Query();
+        JSONArray indexs=query.showIndexs(conn,dbName,tableName);
+
         String[] pkName=query.queryPK(conn,dbName,tableName);
         String[] typeName={"INT","TINYINT","FLOAT","DOUBLE","CHAR","VARCHAR","TINYTEXT","TEXT","LONGTEXT","TINYBLOB","BLOB",
                 "DATE","TIME","YEAR","DATETIME","TIMESTAMP"};
         JSONArray jsonArray=query.queryType(conn,dbName,tableName);
-        //System.out.println(jsonArray);
         for(int i=0;i<columnCount;i++){
             delete[i]=new JButton("删除字段");
             rs.next();
@@ -102,12 +112,55 @@ public class TableStructure extends JRadioButton {
                     ex.printStackTrace();
                 }
             });
+
+            indexEx[i]=new JButton("nan");
+            ifNonUniq[i]=new JCheckBox();
+            indexName[i]=new JTextField("无");
+            for(int j=0;j<indexs.length();++j) {
+                boolean flag=false;
+                if(indexs.getJSONObject(j).getString("columnName").equals(rs.getString(1))){
+                    indexEx[i].setText("删除索引");flag=true;
+                    if(indexs.getJSONObject(j).getString("nonUnique").equals("0")) ifNonUniq[i].setSelected(true);
+                    ifNonUniq[i].setEnabled(false);
+                    indexName[i].setText(indexs.getJSONObject(j).getString("indexName"));
+                    indexName[i].setEditable(false);
+                    break;
+                }
+                if(!flag) indexEx[i].setText("添加索引");
+            }
+            structurePanel.add(indexName[i]);
+            structurePanel.add(ifNonUniq[i]);
+            structurePanel.add(indexEx[i]);
+
+            int y=i;
+            indexEx[i].addActionListener(event->{
+                Define define=new Define();
+                if(indexEx[y].getText().equals("添加索引")){
+                    String sql="CREATE ";
+                    if(ifNonUniq[y].isSelected()) sql+="UNIQUE ";
+                    sql+="INDEX "+indexName[y].getText()+" ON "+dbName+"."+tableName+"("+columnName[y].getText()+")";
+                    define.changeIndex(conn,sql);
+                }else{
+                    String sql="DROP INDEX "+indexName[y].getText()+" ON "+dbName+"."+tableName;
+                    define.changeIndex(conn,sql);
+                }
+                try {
+                    frame.dispose();
+                    TableStructure tableStructure = new TableStructure();
+                    Query query1 = new Query();
+                    ResultSet tempRs = query1.queryColumns(conn, dbName, tableName);
+                    tableStructure.driver(tempRs, conn, tableName, dbName);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            });
         }
         structurePanel.add(confirm);
         structurePanel.add(clear);
         structurePanel.add(add);
         clear.addActionListener(event->{
-            int res=JOptionPane.showConfirmDialog(null,"无主键可能存在安全风险是否继续？","提示",JOptionPane.YES_NO_OPTION);
+            int res=JOptionPane.showConfirmDialog(null,
+                    "无主键可能存在安全风险是否继续？","提示",JOptionPane.YES_NO_OPTION);
             if(res!=1){
                 bg.clearSelection();
             }
@@ -147,7 +200,7 @@ public class TableStructure extends JRadioButton {
         add.addActionListener(event->{
             InsertColumn insertColumn=new InsertColumn();
             insertColumn.driver(conn,tableName,dbName);
-
+            frame.dispose();
         });
         insertTrriger.addActionListener(e->{
             Query query1 = new Query();
@@ -162,7 +215,7 @@ public class TableStructure extends JRadioButton {
         });
 
         frame.add(structurePanel);
-        frame.setSize(600,60+columnCount*50);
+        frame.setSize(900,60+columnCount*50);
         frame.setTitle("编辑"+tableName+"结构");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

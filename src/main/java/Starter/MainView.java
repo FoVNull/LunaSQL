@@ -185,7 +185,7 @@ class  ViewFrame extends JFrame{
         mainPanel.add(toolBar);
 
 
-        leafIcon=new ImageIcon("resources/img/leaf.jpg");
+        leafIcon=new ImageIcon("resources/img/integral.png");
         leafIcon.setImage(leafIcon.getImage().getScaledInstance(22,22,Image.SCALE_DEFAULT));
         leafIcon2=new ImageIcon("resources/img/5.jpg");
         leafIcon2.setImage(leafIcon2.getImage().getScaledInstance(22,22,Image.SCALE_DEFAULT));
@@ -260,20 +260,13 @@ class  ViewFrame extends JFrame{
         JMenu dbType=new JMenu("数据库连接");
         JMenu optimize=new JMenu("优化");
         JMenu sql=new JMenu("SQL操作");
-//        JMenu view=new JMenu("视图操作");
-//        JMenu func=new JMenu("函数");
-//        JMenu backup=new JMenu("备份");
         JMenu log=new JMenu("日志");
-//        JMenu running=new JMenu("运行分析");
         JMenu about=new JMenu("关于");
         menuBar.add(dbType);
-        //menuBar.add(view);
+
         menuBar.add(sql);
-        //menuBar.add(func);
-        //menuBar.add(backup);
         menuBar.add(log);
         menuBar.add(optimize);
-        //menuBar.add(running);
         menuBar.add(about);
 
         JMenuItem generalLog=new JMenuItem("查看常规日志");
@@ -296,10 +289,8 @@ class  ViewFrame extends JFrame{
 
         JMenuItem newQuery =new JMenuItem("自定义sql");
         JMenuItem openQuery =new JMenuItem("打开sql文件");
-        //JMenuItem newLunaSql=new JMenuItem("新建Luna-SQL查询");
         sql.add(newQuery);
         sql.add(openQuery);
-        //sql.add(newLunaSql);
 
         JMenuItem news=new JMenuItem("关于");
         JMenuItem help=new JMenuItem("帮助");
@@ -340,7 +331,7 @@ class  ViewFrame extends JFrame{
                 table[nowTabIndex].setOpaque(false);
                 JScrollPane scrollPane=new JScrollPane();
                 scrollPane.setViewportView(table[nowTabIndex]);
-                tabbedPane.addTab("自定义查询",leafIcon2,scrollPane);
+                tabbedPane.addTab("自定义查询(只读)",leafIcon2,scrollPane);
 
                 confirmTool[nowTabIndex]=new JButton("提交修改");
                 cancelTool[nowTabIndex]=new JButton("取消");
@@ -387,10 +378,20 @@ class  ViewFrame extends JFrame{
         });
 
 
+        help.addActionListener(event->{
+            JOptionPane.showMessageDialog(null,
+                    "<html>所有的日志文件存储于C:/LunaSQL中<br>" +
+                            "sql优化使用的是soar，Credit：github.com/XiaoMi<br>" +
+                            "您可以在安装文件夹中找到soar.exe并使用它，文档参见上述Credit地址</html>",
+                    "帮助",
+                    JOptionPane.PLAIN_MESSAGE
+            );
+        });
+
         news.addActionListener(event->{
             JOptionPane.showMessageDialog(
                     null,
-                    "本软件仅供学习交流使用"+"\n"+"Email:JKL4131@126.com",
+                    "<html>本软件仅供学习交流使用<br>Credit：hikki.top<br>@fovnull 2020</html>",
                     "制作者信息",
                     JOptionPane.PLAIN_MESSAGE
             );
@@ -666,9 +667,10 @@ class  ViewFrame extends JFrame{
                         tableNode = new DefaultMutableTreeNode(rs.getString(1));
                         itemNode[0].add(tableNode);
                     }
-                    for (int i = 0; i < 3; i++) {
-                        temp.add(itemNode[i]);
-                    }
+                    temp.add(itemNode[0]);
+//                    for (int i = 0; i < 3; i++) {
+//                        temp.add(itemNode[i]);
+//                    }
                     temp.setUserObject(temp.getUserObject());
                     tree.updateUI();
                 } catch (SQLException ex) {
@@ -692,14 +694,13 @@ class  ViewFrame extends JFrame{
         JMenuItem insertValue=new JMenuItem("插入记录");
         JMenuItem tableStructure=new JMenuItem("表结构操作");
         JMenuItem deleteTable=new JMenuItem("删除选定表格");
-        JMenuItem indexs=new JMenuItem("索引管理");
+        //JMenuItem indexs=new JMenuItem("索引管理");
         connNodeMunu=new JPopupMenu();
         connNodeMunu.add(query200);
         connNodeMunu.add(insertValue);
         connNodeMunu.add(tableStructure);
         connNodeMunu.add(deleteTable);
-        connNodeMunu.add(indexs);
-
+        //connNodeMunu.add(indexs);
 
         tableStructure.addActionListener(event->{
             DefaultMutableTreeNode temp;
@@ -763,6 +764,7 @@ class  ViewFrame extends JFrame{
         });
         connNodeMunu.show(tree,x,y);
     }
+
     private JScrollPane queryTable(int connectingCount,String dbName,String temp,int tabIndex){
         Query query = new Query();
         JScrollPane scrollPane=new JScrollPane();

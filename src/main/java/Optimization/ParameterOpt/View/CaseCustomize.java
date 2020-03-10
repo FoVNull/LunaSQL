@@ -80,7 +80,7 @@ public class CaseCustomize {
 
         jFrame.add(panel);
         jFrame.setSize(400,650);
-        jFrame.setTitle("评估结果");
+        jFrame.setTitle("自定义用例");
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);

@@ -2,6 +2,7 @@ package MysqlOperation.domin;
 
 import org.json.JSONArray;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -54,9 +55,21 @@ public class Define {
             }
         }
     }
-    public void insertCoulum(Connection conn,String tableName,String dbName,String sql) throws SQLException{
+    public void insertColumn(Connection conn, String sql) throws SQLException{
         PreparedStatement pst;
         pst=(PreparedStatement)conn.prepareStatement(sql);
         pst.executeUpdate();
+    }
+
+    public void changeIndex(Connection conn,String sql){
+        try{
+            PreparedStatement pst;
+            pst=conn.prepareStatement(sql);
+            pst.executeUpdate();
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),
+                    "Error",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 }

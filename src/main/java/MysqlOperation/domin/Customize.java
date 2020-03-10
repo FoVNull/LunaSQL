@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.sql.*;
 
 public class Customize {
+
     public ResultSet excuteSql(Connection conn, String sql) throws SQLException {
         PreparedStatement pst=conn.prepareStatement(sql);
         ResultSet rs=null;

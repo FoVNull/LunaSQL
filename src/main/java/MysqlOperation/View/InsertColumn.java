@@ -30,7 +30,7 @@ public class InsertColumn {
             String sql="ALTER TABLE "+dbName+"."+tableName+" add "+columnName.getText()+" "+columnType.getSelectedItem().toString()+"("+columnLength.getText()+")";
             Define define=new Define();
             try {
-                define.insertCoulum(conn,tableName,dbName,sql);
+                define.insertColumn(conn,sql);
                 frame.dispose();
                 TableStructure.insertTrriger.doClick();
             }
