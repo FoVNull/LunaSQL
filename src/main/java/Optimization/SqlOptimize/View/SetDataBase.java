@@ -1,4 +1,4 @@
-package Optimization.SqlOptimize.Service;
+package Optimization.SqlOptimize.View;
 
 import DBConn.ReadInfo;
 import Optimization.SqlOptimize.View.SoarConsole;
@@ -39,19 +39,19 @@ public class SetDataBase {
             group.add(buttons[i]);
             panel.add(buttons[i]);
         }
-        panel.setBounds(0,0,500,len*60);
+        panel.setBounds(0,0,600,len*50);
 
         cusPanel.add(new JLabel("自定义测试库"));
         buttons[len]=new JRadioButton();
         group.add(buttons[len]);
         cusPanel.add(buttons[len]);cusPanel.add(new JLabel());cusPanel.add(new JLabel());
-        cusPanel.add(new JLabel());cusPanel.add(new JLabel());cusPanel.add(new JLabel());
+        cusPanel.add(new JLabel());cusPanel.add(new JLabel());
 
         cusPanel.add(new JLabel("地址:端口"));
         cusPanel.add(new JLabel("用户名："));
         cusPanel.add(new JLabel("密码："));
         cusPanel.add(new JLabel("模式(数据库)："));
-        cusPanel.add(new JLabel());
+        cusPanel.add(new JLabel());cusPanel.add(new JLabel());
 
         JTextField[] cusInfo=new JTextField[4];
         for(int i=0;i<cusInfo.length;++i) {
@@ -64,8 +64,9 @@ public class SetDataBase {
         cusButton.addActionListener(event->{
             JSONObject object=null;
             if(buttons[len].isSelected()){
+                object=new JSONObject();
                 object.put("url", cusInfo[0].getText());
-                object.put("root", cusInfo[1].getText());
+                object.put("userName", cusInfo[1].getText());
                 object.put("psw", cusInfo[2].getText());
                 object.put("schema", cusInfo[3].getText());
                 SoarConsole.defaultDB=object;
@@ -89,13 +90,13 @@ public class SetDataBase {
         });
 
         cusPanel.add(cusButton);
-        cusPanel.setBounds(0,len*60+25,500,100);
+        cusPanel.setBounds(0,len*50+25,600,100);
         cusPanel.setLayout(new GridLayout(3,0,0,0));
 
         jFrame.add(panel);
         jFrame.add(cusPanel);
         jFrame.setLayout(null);
-        jFrame.setSize(550,len*60+200);
+        jFrame.setSize(650,len*50+200);
         jFrame.setTitle("选择测试库");
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

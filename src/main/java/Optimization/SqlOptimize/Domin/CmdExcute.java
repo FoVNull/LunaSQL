@@ -3,7 +3,6 @@ package Optimization.SqlOptimize.Domin;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 
 public class CmdExcute {
     public String excuteCmd(String cmd){
@@ -19,6 +18,8 @@ public class CmdExcute {
                res.append(line + "\n");
             }
             br.close();
+            SoarLog sl=new SoarLog();
+            sl.writeLog(res.toString(),cmd);
         }catch (IOException e){
             e.printStackTrace();
         }

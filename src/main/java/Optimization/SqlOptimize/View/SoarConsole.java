@@ -1,6 +1,7 @@
 package Optimization.SqlOptimize.View;
 
-import Optimization.SqlOptimize.Service.SetDataBase;
+import MysqlOperation.domin.Script;
+import Optimization.SqlOptimize.Domin.SoarLog;
 import Optimization.SqlOptimize.Service.SoarOperation;
 import org.json.JSONObject;
 
@@ -23,9 +24,12 @@ public class SoarConsole {
         JLabel text1=new JLabel("sql语句输入");
         JLabel dbInfo=new JLabel("测试库:");
         JButton dbSetting=new JButton("配置测试库");
+        JCheckBox useDB=new JCheckBox();
+        useDB.setText("在测试库中运行评估和重写");
         text1.setBounds(10,10,100,50);
-        dbInfo.setBounds(200,10,250,50);
-        dbSetting.setBounds(450,20,100,25);
+        dbInfo.setBounds(200,10,200,50);
+        dbSetting.setBounds(400,25,100,25);
+        useDB.setBounds(500,25,180,25);
 
         JTextArea sql=new JTextArea();
         sql.setBounds(10,60,600,200);
@@ -52,23 +56,22 @@ public class SoarConsole {
             jfc.showOpenDialog(null);
             File inputPath=jfc.getSelectedFile();
             if(inputPath!=null) {
-                sql.setText(inputPath.toString());
+                Script scriptR = new Script();
+                String scriptText=scriptR.readScript(inputPath);
+                sql.setText(scriptText);
             }
         });
 
         JPanel toolBar=new JPanel();
         toolBar.setLayout(new GridLayout(0,3,0,0));
         toolBar.setBounds(0,20,750,100);
-        String[] toolName={"评估语句","sql重写","sql美化","Explain分析","合并多条ALTER","优化日志"};
+        String[] toolName={"评估语句","sql重写","sql美化","合并多条ALTER","优化日志"};
         JButton[] buttons=new JButton[toolName.length];
 
         toolBar.add(script);
 
         buttons[0]=new JButton(toolName[0]);
         toolBar.add(buttons[0]);
-        JCheckBox useDB=new JCheckBox();
-        useDB.setText("在数据库中执行后评估SQL");
-        toolBar.add(useDB);
         for(int i=1;i<toolName.length;++i){
             buttons[i]=new JButton(toolName[i]);
             toolBar.add(buttons[i]);
@@ -106,21 +109,37 @@ public class SoarConsole {
             sdb.driver();
         });
         buttons[1].addActionListener(event->{
-            String res=sop.rewriteSQL(sql.getText());
-            result.append(res);
+            if(useDB.isSelected()) {
+                if (defaultDB == null) {
+                    JOptionPane.showMessageDialog(null, "请先选择测试库",
+                            "提示", JOptionPane.WARNING_MESSAGE);
+                    dbSetting.doClick();
+                } else {
+                    String res = sop.rewriteSQLWithDB(sql.getText(), defaultDB);
+                    result.append(res);
+                }
+            }else {
+                String res = sop.rewriteSQL(sql.getText());
+                result.append(res);
+            }
         });
         buttons[2].addActionListener(event->{
             String res=sop.prettySQL(sql.getText());
             result.append(res);
         });
-        buttons[4].addActionListener(event->{
+        buttons[3].addActionListener(event->{
             String res=sop.mergeAlter(sql.getText());
             result.append(res);
+        });
+        buttons[4].addActionListener(event->{
+            SoarLog sl=new SoarLog();
+            sl.readLog();
         });
 
         panel.add(text1);
         panel.add(dbInfo);
         panel.add(dbSetting);
+        panel.add(useDB);
         panel.add(sql);
         funcPanel.add(toolBar);
 

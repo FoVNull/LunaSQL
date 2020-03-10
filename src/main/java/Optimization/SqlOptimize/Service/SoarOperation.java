@@ -16,11 +16,7 @@ public class SoarOperation {
         }
     }
 
-    public String evaluateSQL(String sql){
-        String cmd="echo "+sql+" | \""+local.toString()+"soar\"";
-        return ce.excuteCmd(cmd);
-    }
-    public String evaluateSQLWithDB(String sql, JSONObject object){
+    public String mergePath(JSONObject object){
         StringBuilder dbInfo=new StringBuilder();
         dbInfo.append(object.getString("userName"));
         dbInfo.append(":");
@@ -29,8 +25,16 @@ public class SoarOperation {
         dbInfo.append(object.getString("url"));
         dbInfo.append("/");
         dbInfo.append(object.getString("schema"));
-        String cmd="echo "+sql+" | \""+local.toString()+"soar\" -test-dsn=\""+dbInfo.toString()+"\"";
-        System.out.print(cmd);
+        return dbInfo.toString();
+    }
+
+    public String evaluateSQL(String sql){
+        String cmd="echo "+sql+" | \""+local.toString()+"soar\"";
+        return ce.excuteCmd(cmd);
+    }
+    public String evaluateSQLWithDB(String sql, JSONObject object){
+        String dbInfo=mergePath(object);
+        String cmd="echo "+sql+" | \""+local.toString()+"soar\" -test-dsn=\""+dbInfo+"\" -allow-online-as-test";
         return ce.excuteCmd(cmd);
     }
 
@@ -46,4 +50,10 @@ public class SoarOperation {
         String cmd="echo "+sql+" | \""+local.toString()+"soar\" -report-type rewrite ";
         return ce.excuteCmd(cmd);
     }
+    public String rewriteSQLWithDB(String sql, JSONObject object){
+        String dbInfo=mergePath(object);
+        String cmd="echo "+sql+" | \""+local.toString()+"soar\" -report-type rewrite -test-dsn=\""+dbInfo+"\" -allow-online-as-test";
+        return ce.excuteCmd(cmd);
+    }
+
 }
