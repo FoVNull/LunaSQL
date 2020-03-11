@@ -26,7 +26,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -122,7 +122,12 @@ class  ViewFrame extends JFrame{
         //界面初始化
         setSize(DEFAULT_WIDTH,DEFAULT_HEIGHT);
 
-        String imgUrl="resources/img";
+        StringBuilder urlBuilder=Location.Path.getPath();;
+        urlBuilder.append("classes/img");
+        String imgUrl=urlBuilder.toString();
+
+        setIconImage(Toolkit.getDefaultToolkit().getImage(imgUrl+"/LunaSQL-LOGO.png"));
+
 
         ImageIcon listBg=new ImageIcon(imgUrl+"/3.jpg");
         listBg.setImage(listBg.getImage().getScaledInstance(300,650,Image.SCALE_DEFAULT));
@@ -186,13 +191,13 @@ class  ViewFrame extends JFrame{
         mainPanel.add(toolBar);
 
 
-        leafIcon=new ImageIcon("resources/img/integral.png");
+        leafIcon=new ImageIcon(imgUrl+"/integral.png");
         leafIcon.setImage(leafIcon.getImage().getScaledInstance(22,22,Image.SCALE_DEFAULT));
-        leafIcon2=new ImageIcon("resources/img/5.jpg");
+        leafIcon2=new ImageIcon(imgUrl+"/5.jpg");
         leafIcon2.setImage(leafIcon2.getImage().getScaledInstance(22,22,Image.SCALE_DEFAULT));
-        openIcon=new ImageIcon("resources/img/open.png");
+        openIcon=new ImageIcon(imgUrl+"/open.png");
         openIcon.setImage(openIcon.getImage().getScaledInstance(22,22,Image.SCALE_DEFAULT));
-        closeIcon=new ImageIcon("resources/img/close.jpg");
+        closeIcon=new ImageIcon(imgUrl+"/close.jpg");
         closeIcon.setImage(closeIcon.getImage().getScaledInstance(22,22,Image.SCALE_DEFAULT));
         render.setLeafIcon(leafIcon);
         render.setOpenIcon(openIcon);
@@ -381,7 +386,7 @@ class  ViewFrame extends JFrame{
 
         help.addActionListener(event->{
             JOptionPane.showMessageDialog(null,
-                    "<html>所有的日志文件存储于C:/LunaSQL中<br>" +
+                    "<html>所有的日志文件存储于LunaSQL/classes/LunaLOG文件夹中<br>" +
                             "sql优化使用的是soar，Credit：github.com/XiaoMi<br>" +
                             "您可以在安装文件夹中找到soar.exe并使用它，文档参见上述Credit地址</html>",
                     "帮助",
@@ -440,10 +445,12 @@ class  ViewFrame extends JFrame{
             }catch (NullPointerException e){
                 JOptionPane.showMessageDialog(null,"未连接数据库！","Error",JOptionPane.ERROR_MESSAGE);
             }
-            JScrollPane logPane=queryLog(logRs,++nowTabIndex);
-            tabbedPane.addTab("general_log",leafIcon2,logPane);
-            tabbedPane.setSelectedIndex(nowTabIndex);
-            tabbedPane.updateUI();
+            if(logRs!=null) {
+                JScrollPane logPane = queryLog(logRs, ++nowTabIndex);
+                tabbedPane.addTab("general_log", leafIcon2, logPane);
+                tabbedPane.setSelectedIndex(nowTabIndex);
+                tabbedPane.updateUI();
+            }
         });
 
         slowLog.addActionListener(event->{
@@ -569,6 +576,7 @@ class  ViewFrame extends JFrame{
                     connecting[connectingCount] = mysqlConn.conn(connectingUrl, connectingName, connectingPsw);
                     rs = mysqlConn.showDB(connecting[connectingCount]);
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                 }
 

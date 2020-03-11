@@ -3,17 +3,24 @@ package Optimization.SqlOptimize.Service;
 import Optimization.SqlOptimize.Domin.CmdExcute;
 import org.json.JSONObject;
 
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class SoarOperation {
     CmdExcute ce=new CmdExcute();
     StringBuilder local=new StringBuilder();
 
 
     public SoarOperation(){
-        String[] path= SoarOperation.class.getResource("/soar.exe").getPath()
+
+        String[] path= this.getClass().getClassLoader().getResource("soar.exe").getPath()
                 .replaceAll("%20"," ").split("/");
-        for(int i=1;i<path.length-1;++i){
+        for(int i=1;i<path.length-2;++i){
             local.append(path[i]+"\\");
-        }
+        }local.append("classes\\");
     }
 
     public String mergePath(JSONObject object){

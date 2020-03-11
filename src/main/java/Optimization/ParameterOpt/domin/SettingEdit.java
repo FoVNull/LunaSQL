@@ -10,8 +10,8 @@ import java.util.*;
 
 public class SettingEdit {
 
-    public Map<String,String> paraQuery(Connection conn){
-        Map<String,String> res=new LinkedHashMap<>();
+    public HashMap<String,String> paraQuery(Connection conn){
+        HashMap<String,String> res=new HashMap<>();
         String[] sql= {"show variables like 'table_open_cache'",
                 "show status like 'Open_tables'",
                 "show status like 'Opened_tables'",

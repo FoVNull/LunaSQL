@@ -1,5 +1,6 @@
 package DBConn;
 
+import Starter.Location;
 import org.json.*;
 
 import java.io.BufferedReader;
@@ -8,14 +9,12 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ReadInfo {
-//    public static void main(String[] args){
-//        //System.out.println(readInfo().getJSONObject(0).getString("connName"));
-//        System.out.println(readInfo());
-//    }
     public static JSONArray readInfo() {
         JSONObject urlObject = new JSONObject();
         JSONArray urlArray = new JSONArray();
-        File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "connInfo.txt");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/connInfo.txt");
+        File file = new File(path.toString());
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
             String s = null;

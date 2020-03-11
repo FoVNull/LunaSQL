@@ -15,7 +15,7 @@ public class ParameterView {
         JPanel panel=new JPanel();
         panel.setLayout(new GridLayout(0,2,1,0));
 
-        Map<String,String> para=se.paraQuery(conn);
+        HashMap<String,String> para=se.paraQuery(conn);
 
         /*
         *前两个参数特殊处理

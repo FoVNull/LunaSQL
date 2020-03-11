@@ -1,12 +1,16 @@
 package DBConn;
 
 
+import Starter.Location;
+
 import java.io.*;
 
 public class SaveInfo {
     public boolean saveLogin(String url,String userName,String psw,String connName,String dbType) throws IOException{
-        File file = new File("C:" + File.separator + "LunaSQL");
-        File file1 = new File("C:"+ File.separator + "LunaSQL"+ File.separator +"connInfo.txt");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG");
+        File file = new File(path.toString());
+        File file1 = new File(path.toString() +"/connInfo.txt");
         if(!file.exists()){
             file.mkdirs();
         }

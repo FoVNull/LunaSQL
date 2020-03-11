@@ -1,5 +1,7 @@
 package Optimization.ParameterOpt.domin;
 
+import Starter.Location;
+
 import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -11,7 +13,9 @@ public class EvaluationIO {
 //        EvaluationIO eio=new EvaluationIO();
 //    }
     public String[] readLast(){
-        File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "Evaluation.csv");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/Evaluation.csv");
+        File file = new File(path.toString());
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -36,7 +40,9 @@ public class EvaluationIO {
     }
 
     public void writeLast(int[] input){
-        File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "Evaluation.csv");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/Evaluation.csv");
+        File file = new File(path.toString());
         try {
             Writer out = new FileWriter(file,true);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -49,15 +55,19 @@ public class EvaluationIO {
     }
 
     public void checkHistory(){
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/Evaluation.csv");
         try {
             Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " +
-                    "C:" + File.separator + "LunaSQL" + File.separator + "Evaluation.csv");
+                    path.toString());
         }catch (IOException e){
             e.printStackTrace();
         }
     }
 
     public void setDefault(String sql){
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/defaultcase.txt");
         File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "defaultcase.txt");
         try{
             if(!file.exists()){
@@ -81,7 +91,9 @@ public class EvaluationIO {
     }
 
     public String readDefault() {
-        File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "defaultcase.txt");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/defaultcase.txt");
+        File file = new File(path.toString());
         String res="";
         try {
             if (!file.exists()) {
@@ -100,7 +112,9 @@ public class EvaluationIO {
     }
 
     public String[] readUserCase() {
-        File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "defaultcase.txt");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/defaultcase.txt");
+        File file = new File(path.toString());
         String[] res=new String[4];
         try {
             Scanner sc = new Scanner(file);
@@ -121,7 +135,9 @@ public class EvaluationIO {
     }
 
     public void saveUserCase(String[] sql){
-        File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "defaultcase.txt");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/defaultcase.txt");
+        File file = new File(path.toString());
         try{
             BufferedReader br = new BufferedReader(new FileReader(file));
             StringBuilder str = new StringBuilder();

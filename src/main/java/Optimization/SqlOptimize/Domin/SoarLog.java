@@ -1,6 +1,7 @@
 package Optimization.SqlOptimize.Domin;
 
 import Optimization.SqlOptimize.Service.SoarOperation;
+import Starter.Location;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -9,8 +10,10 @@ import java.io.Writer;
 
 public class SoarLog {
     public void writeLog(String text,String cmd) throws IOException {
-        File file = new File("C:" + File.separator + "LunaSQL");
-        File file1 = new File("C:"+ File.separator + "LunaSQL"+ File.separator +"optimizeLog.log");
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG");
+        File file = new File(path.toString());
+        File file1 = new File(path.toString() +"/optimizeLog.log");
         if(!file.exists()){
             file.mkdirs();
         }
@@ -18,13 +21,14 @@ public class SoarLog {
             file1.createNewFile();
         }
         Writer out = new FileWriter(file1, true);
-        out.write(text + "\r\n" + "命令:"+ cmd);
+        out.write(text + "\r\n" + "command:"+ cmd);
         out.close();
     }
     public void readLog(){
-        String root="C:" + File.separator + "LunaSQL" + File.separator + "optimizeLog.log";
+        StringBuilder path= Location.Path.getPath();
+        path.append("classes/LunaLOG/optimizeLog.log");
         try {
-            Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + root);
+            Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + path.toString());
         }catch (IOException e){
             e.printStackTrace();
         }
