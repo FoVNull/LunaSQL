@@ -1,6 +1,7 @@
 package Optimization.ParameterOpt.Service;
 
 import Optimization.ParameterOpt.View.ParaEvaluation;
+import Optimization.ParameterOpt.domin.EvaluationIO;
 
 import java.sql.Connection;
 
@@ -13,6 +14,8 @@ public class MainThread extends Thread {
     int testType;
 
     public static HashMap<Integer,String[]> map;
+    public static int sumOfMulti;
+    public static boolean stopFlag;
 
     public MainThread(Connection conn,String[] sql,int testType){
         this.conn=conn;this.sql=sql;this.testType=testType;
@@ -30,13 +33,17 @@ public class MainThread extends Thread {
             }
         }else {
             multiSql();
-            ParaEvaluation paraEvaluation = new ParaEvaluation();
-            paraEvaluation.showRes(map, conn);
+            if(!stopFlag) {
+                ParaEvaluation paraEvaluation = new ParaEvaluation();
+                paraEvaluation.showRes(map, conn);
+            }
         }
     }
 
     public void multiSql(){
         map=new HashMap<>();
+        sumOfMulti=0;
+        stopFlag=false;
 
         ArrayList<Thread> queue=new ArrayList<>();
 
@@ -53,7 +60,14 @@ public class MainThread extends Thread {
             e.printStackTrace();
         }
 
-        for(int i=1;i<4;++i) map.put(i,map.get(0));
+        int avg=sumOfMulti/sql.length;
 
+        EvaluationIO eio=new EvaluationIO();
+        String[] t=eio.readLast();
+
+        for(int i=0;i<4;++i) {
+            String[] temp={t[i],avg+"",t[4]};
+            map.put(i,temp);
+        }
     }
 }

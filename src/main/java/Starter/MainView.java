@@ -38,6 +38,7 @@ public class MainView {
         EventQueue.invokeLater(()->{
             JFrame frame=new ViewFrame();
             frame.setTitle("Luna-SQL");
+            frame.setResizable(false);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setLocationRelativeTo(null);

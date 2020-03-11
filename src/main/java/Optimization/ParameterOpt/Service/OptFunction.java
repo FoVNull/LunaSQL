@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
 public class OptFunction {
-    int i;int flag;
+    int i;int flag=0;
 
     public LinkedHashMap<Integer,String[]> initTest(String[] sql,Connection conn,int testType){
         LinkedHashMap<Integer,String[]> res=new LinkedHashMap<>();
@@ -28,7 +28,6 @@ public class OptFunction {
     }
 
     public String[] run(Connection conn,String sql,int type){
-        flag=0;
         String[] res=new String[3];
         JProgressBar jpb=new JProgressBar(0,100);
         JFrame jFrame=new JFrame();
@@ -59,7 +58,7 @@ public class OptFunction {
                 n+=y-x;
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null,e.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
+                flag=1;
                 break;
             }
         }

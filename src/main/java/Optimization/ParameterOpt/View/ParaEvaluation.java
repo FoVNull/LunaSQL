@@ -20,14 +20,14 @@ public class ParaEvaluation {
 
     public void showRes(HashMap<Integer, String[]> value,Connection conn){
         for(int i=0;i<4;++i){
-            if(!value.containsKey(i)) value.put(i,new String[]{"0","1","null"});
+            if(!value.containsKey(i)) value.put(i,new String[]{"0","0","null"});
         }
 
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
         panel.setLayout(new GridLayout(0,4,1,0));
-        panel.add(new JLabel("若使用的是默认模式，由于只执行一个用例，所有值相同"));
-        panel.add(new JLabel());panel.add(new JLabel());panel.add(new JLabel());
+        panel.add(new JLabel("若使用的是默认模式："));
+        panel.add(new JLabel("由于只执行一个用例，所有值相同"));panel.add(new JLabel());panel.add(new JLabel());
         panel.add(new JLabel("参数名称"));
         panel.add(new JLabel("用例测试时间(ms)"));
         panel.add(new JLabel("较上次测试变化(ms)"));
