@@ -51,7 +51,10 @@ public class MainView {
         exit.addActionListener(event->{
             System.exit(0);
         });
-        Image trayImg=Toolkit.getDefaultToolkit().getImage("resources/img/leaf2.gif");
+        StringBuilder urlBuilder=Location.Path.getPath();;
+        urlBuilder.append("classes/img");
+        String imgUrl=urlBuilder.toString();
+        Image trayImg=Toolkit.getDefaultToolkit().getImage(imgUrl+"/leaf2.gif");
         SystemTray tray = SystemTray.getSystemTray();
         if(SystemTray.isSupported()){
             TrayIcon trayIcon = new TrayIcon(trayImg,"Luna-SQL", trayMenu);
