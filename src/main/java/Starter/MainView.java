@@ -338,7 +338,9 @@ class  ViewFrame extends JFrame{
                 tableHeader.setResizingAllowed(true);
                 tableHeader.setReorderingAllowed(true);
                 table[nowTabIndex].setOpaque(false);
+                table[nowTabIndex].setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                 JScrollPane scrollPane=new JScrollPane();
+                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                 scrollPane.setViewportView(table[nowTabIndex]);
                 tabbedPane.addTab("自定义查询(只读)",leafIcon2,scrollPane);
 
@@ -377,7 +379,7 @@ class  ViewFrame extends JFrame{
                     List<ResultSet> scSql=script.multiEx(inputPath, connecting[connectingCount]);
                     for(ResultSet r:scSql){
                         JScrollPane logPane=queryLog(r,++nowTabIndex);
-                        tabbedPane.addTab("general_log",leafIcon2,logPane);
+                        tabbedPane.addTab("自定义查询(只读)",leafIcon2,logPane);
                     }
                 }catch (SQLException e){
                     JOptionPane.showMessageDialog(null,e.getMessage(),
@@ -385,7 +387,6 @@ class  ViewFrame extends JFrame{
                 }
             }
         });
-
 
         help.addActionListener(event->{
             JOptionPane.showMessageDialog(null,
@@ -916,6 +917,10 @@ class  ViewFrame extends JFrame{
             tableHeader.setResizingAllowed(true);
             tableHeader.setReorderingAllowed(true);
             table[tabIndex].setOpaque(false);
+
+            table[tabIndex].setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
             scrollPane.setViewportView(table[tabIndex]);
         }
         catch (SQLException ex){
@@ -1013,6 +1018,10 @@ class  ViewFrame extends JFrame{
         tableHeader.setResizingAllowed(true);
         tableHeader.setReorderingAllowed(true);
         table[tabIndex].setOpaque(false);
+
+        table[tabIndex].setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        logPne.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
         logPne.setViewportView(table[tabIndex]);
 
         confirmTool[nowTabIndex]=new JButton("提交修改");

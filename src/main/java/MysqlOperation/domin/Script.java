@@ -33,7 +33,7 @@ public class Script {
 
         Customize customize=new Customize();
         for(int i=0;i<sql.length;++i){
-            rs.add(customize.excuteSql(conn,sql[i]));
+            rs.add(customize.excuteSql(conn,sql[i]).getCusResRs());
         }
         return rs;
     }
