@@ -7,6 +7,7 @@
 (https://github.com/XiaoMi/soar)
 
 <hr>
+由于需要适配webswing，开发环境为jdk11<br>
 使用需要配置JRE（java版本8以上)<br>
 20.3.12<br>
 利用webswing框架，也可以在web端使用LunaSQL，满足远程操作服务器的需求（webswing支持的java版本为8-11）。<br>
