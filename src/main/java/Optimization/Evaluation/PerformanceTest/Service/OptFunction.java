@@ -1,7 +1,7 @@
-package Optimization.ParameterOpt.Service;
+package Optimization.Evaluation.PerformanceTest.Service;
 
 
-import Optimization.ParameterOpt.domin.EvaluationIO;
+import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
 
 import javax.swing.*;
 import java.sql.Connection;

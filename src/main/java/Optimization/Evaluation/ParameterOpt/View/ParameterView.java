@@ -1,6 +1,6 @@
-package Optimization.ParameterOpt.View;
+package Optimization.Evaluation.ParameterOpt.View;
 
-import Optimization.ParameterOpt.domin.SettingEdit;
+import Optimization.Evaluation.ParameterOpt.domin.SettingEdit;
 
 import javax.swing.*;
 import java.awt.*;

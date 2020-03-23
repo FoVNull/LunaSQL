@@ -1,6 +1,6 @@
-package Optimization.ParameterOpt.View;
+package Optimization.Evaluation.PerformanceTest.View;
 
-import Optimization.ParameterOpt.domin.EvaluationIO;
+import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,10 +14,10 @@ public class CaseCustomize {
 
         panel.setLayout(new GridLayout(0,1,0,0));
 
-        String[] paraName={"join_buffer_size","read_buffer_size","sort_buffer_size","key_buffer_size"};
+        String[] paraName={"  join_buffer_size","  read_buffer_size","  sort_buffer_size","  key_buffer_size"};
         JTextArea[] jTextArea=new JTextArea[4];
 
-        panel.add(new JLabel("语句可以为空"));
+        panel.add(new JLabel("  语句可以为空"));
 
         EvaluationIO eios=new EvaluationIO();
         String[] userCase=eios.readUserCase();
@@ -65,7 +65,7 @@ public class CaseCustomize {
         panel.add(ifSave);
         panel.add(confirm);
 
-        JButton setDefault=new JButton("更改默认语句并提交运行");
+        JButton setDefault=new JButton("确认默认语句并提交运行");
         JTextArea defaultSQL=new JTextArea();
 
         setDefault.addActionListener(event->{
@@ -75,11 +75,11 @@ public class CaseCustomize {
             eio.setDefault(defaultSQL.getText());
             jFrame.dispose();
         });
-
+        panel.add(new JLabel("  修改默认用例↓"));
         panel.add(defaultSQL);panel.add(setDefault);
 
         jFrame.add(panel);
-        jFrame.setSize(400,650);
+        jFrame.setSize(500,700);
         jFrame.setTitle("自定义用例");
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

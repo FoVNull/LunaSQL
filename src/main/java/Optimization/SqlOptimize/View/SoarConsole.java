@@ -1,7 +1,7 @@
 package Optimization.SqlOptimize.View;
 
 import MysqlOperation.domin.Script;
-import Optimization.SqlOptimize.Domin.SoarLog;
+import Optimization.SqlOptimize.domin.SoarLog;
 import Optimization.SqlOptimize.Service.SoarOperation;
 import org.json.JSONObject;
 
@@ -106,7 +106,7 @@ public class SoarConsole {
         });
         dbSetting.addActionListener(event->{
             SetDataBase sdb=new SetDataBase();
-            sdb.driver();
+            sdb.driver("soar");
         });
         buttons[1].addActionListener(event->{
             if(useDB.isSelected()) {
@@ -150,7 +150,7 @@ public class SoarConsole {
 
         jFrame.setLayout(null);
         jFrame.setSize(750,770);
-        jFrame.setTitle("soar操作界面");
+        jFrame.setTitle("sql优化");
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);

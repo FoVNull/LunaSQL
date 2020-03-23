@@ -1,18 +1,12 @@
 package Optimization.SqlOptimize.Service;
 
-import Optimization.SqlOptimize.Domin.CmdExcute;
+import Optimization.SqlOptimize.domin.CmdExcute;
 import org.json.JSONObject;
-
-import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class SoarOperation {
     CmdExcute ce=new CmdExcute();
     StringBuilder local=new StringBuilder();
-
+    String type="soar";
 
     public SoarOperation(){
 
@@ -37,30 +31,30 @@ public class SoarOperation {
 
     public String evaluateSQL(String sql){
         String cmd="echo "+sql+" | \""+local.toString()+"soar\"";
-        return ce.excuteCmd(cmd);
+        return ce.excuteCmd(cmd,type);
     }
     public String evaluateSQLWithDB(String sql, JSONObject object){
         String dbInfo=mergePath(object);
         String cmd="echo "+sql+" | \""+local.toString()+"soar\" -test-dsn=\""+dbInfo+"\" -allow-online-as-test";
-        return ce.excuteCmd(cmd);
+        return ce.excuteCmd(cmd,type);
     }
 
     public String prettySQL(String sql){
         String cmd="echo "+sql+" | \""+local.toString()+"soar\" -report-type=pretty";
-        return ce.excuteCmd(cmd);
+        return ce.excuteCmd(cmd,type);
     }
     public String mergeAlter(String sql){
         String cmd="echo "+sql+" | \""+local.toString()+"soar\" -report-type rewrite -rewrite-rules mergealter";
-        return ce.excuteCmd(cmd);
+        return ce.excuteCmd(cmd,type);
     }
     public String rewriteSQL(String sql){
         String cmd="echo "+sql+" | \""+local.toString()+"soar\" -report-type rewrite ";
-        return ce.excuteCmd(cmd);
+        return ce.excuteCmd(cmd,type);
     }
     public String rewriteSQLWithDB(String sql, JSONObject object){
         String dbInfo=mergePath(object);
         String cmd="echo "+sql+" | \""+local.toString()+"soar\" -report-type rewrite -test-dsn=\""+dbInfo+"\" -allow-online-as-test";
-        return ce.excuteCmd(cmd);
+        return ce.excuteCmd(cmd,type);
     }
 
 }

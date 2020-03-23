@@ -1,4 +1,4 @@
-package Optimization.ParameterOpt.View;
+package Optimization.Evaluation.PerformanceTest.View;
 
 import MysqlOperation.domin.Script;
 

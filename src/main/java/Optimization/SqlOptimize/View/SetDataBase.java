@@ -1,6 +1,7 @@
 package Optimization.SqlOptimize.View;
 
 import DBConn.ReadInfo;
+import Optimization.Evaluation.PerformanceTest.View.MysqlSlap;
 import Optimization.SqlOptimize.View.SoarConsole;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,7 +11,7 @@ import java.awt.*;
 
 public class SetDataBase {
 
-    public void driver(){
+    public void driver(String type){
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
         JPanel cusPanel=new JPanel();
@@ -77,8 +78,13 @@ public class SetDataBase {
                     if (buttons[i].isSelected() && !schemaName[i].getText().equals("")) {
                         object = dbList.getJSONObject(i);
                         object.put("schema", schemaName[i].getText());
-                        SoarConsole.defaultDB = object;
-                        SoarConsole.dbListen.doClick();
+                        if(type.equals("soar")) {
+                            SoarConsole.defaultDB = object;
+                            SoarConsole.dbListen.doClick();
+                        }else{
+                            MysqlSlap.defaultDB = object;
+                            MysqlSlap.dbListen.doClick();
+                        }
                         jFrame.dispose();break;
                     }
                 }

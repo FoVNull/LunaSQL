@@ -3,18 +3,19 @@ package Starter;
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
 import MysqlOperation.domin.Script;
+import Optimization.Evaluation.PerformanceTest.View.MysqlSlap;
 import Optimization.LogAnalyses.domin.LogReader;
 import Optimization.LogAnalyses.View.LogConsoleView;
-import Optimization.ParameterOpt.View.CaseCustomize;
-import Optimization.ParameterOpt.View.MultiCases;
-import Optimization.ParameterOpt.View.ParameterView;
+import Optimization.Evaluation.PerformanceTest.View.CaseCustomize;
+import Optimization.Evaluation.PerformanceTest.View.MultiCases;
+import Optimization.Evaluation.ParameterOpt.View.ParameterView;
 import MysqlOperation.View.TableStructure;
 import MysqlOperation.domin.Delete;
 import MysqlOperation.View.InsertInfo;
 import MysqlOperation.domin.Query;
 import MysqlOperation.domin.Update;
-import Optimization.ParameterOpt.View.ParaEvaluation;
-import Optimization.ParameterOpt.domin.EvaluationIO;
+import Optimization.Evaluation.PerformanceTest.View.ParaEvaluation;
+import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
 import Optimization.SqlOptimize.View.SoarConsole;
 
 import javax.swing.*;
@@ -286,11 +287,13 @@ class  ViewFrame extends JFrame{
         JMenuItem logConsole=new JMenuItem("日志控制台");
         log.add(logConsole);
 
-        JMenuItem parameterEdit=new JMenuItem("参数优化");
-        JMenuItem autoPara=new JMenuItem("参数性能评估");
+        JMenuItem parameterEdit=new JMenuItem("参数调整");
+        JMenuItem autoPara=new JMenuItem("参数性能评估(LunaSQL测试)");
+        JMenuItem slap=new JMenuItem("mysqlslap压力测试");
         JMenuItem overWrite=new JMenuItem("sql优化");
         optimize.add(parameterEdit);
         optimize.add(autoPara);
+        optimize.add(slap);
         optimize.add(overWrite);
 
         JMenuItem mysql=new JMenuItem("Mysql");
@@ -509,6 +512,11 @@ class  ViewFrame extends JFrame{
                     multiCases.driver(connecting[connectingCount]);
                 }
             }
+        });
+
+        slap.addActionListener(event->{
+            MysqlSlap ms=new MysqlSlap();
+            ms.consoleDriver();
         });
 
         overWrite.addActionListener(event->{

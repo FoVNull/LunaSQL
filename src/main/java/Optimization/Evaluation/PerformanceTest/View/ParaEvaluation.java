@@ -1,8 +1,8 @@
-package Optimization.ParameterOpt.View;
+package Optimization.Evaluation.PerformanceTest.View;
 
-import Optimization.ParameterOpt.Service.MainThread;
-import Optimization.ParameterOpt.domin.EvaluationIO;
-import Optimization.ParameterOpt.domin.SettingEdit;
+import Optimization.Evaluation.PerformanceTest.Service.MainThread;
+import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
+import Optimization.Evaluation.ParameterOpt.domin.SettingEdit;
 
 import javax.swing.*;
 import java.awt.*;

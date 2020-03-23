@@ -1,9 +1,8 @@
-package Optimization.ParameterOpt.domin;
+package Optimization.Evaluation.ParameterOpt.domin;
 
 import Starter.Location;
 
 import java.io.*;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;

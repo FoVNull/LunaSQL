@@ -1,4 +1,4 @@
-package Optimization.ParameterOpt.domin;
+package Optimization.Evaluation.ParameterOpt.domin;
 
 import javax.swing.*;
 import java.io.IOException;
