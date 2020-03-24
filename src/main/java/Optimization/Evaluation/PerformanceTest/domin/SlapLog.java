@@ -22,7 +22,7 @@ public class SlapLog {
 
         StringBuilder nonPwdCmd=new StringBuilder();
         char[] chars=cmd.toCharArray();
-        boolean flag=false;
+        boolean flag=false;boolean first=true;
         for(int i=0;i<chars.length-1;++i){
             if(flag){
                 if(chars[i]!=' ') nonPwdCmd.append("*");
@@ -32,10 +32,9 @@ public class SlapLog {
             }
             StringBuilder temp=new StringBuilder();
             temp.append(chars[i]).append(chars[i+1]);
-            if(temp.toString().equals("-p")) flag=true;
+            if(temp.toString().equals("-p")&&first) {flag=true;first=false;}
         }
         nonPwdCmd.append(chars[chars.length-1]);
-        System.out.println(nonPwdCmd);
         Writer out = new FileWriter(file1, true);
         out.write(text + "\r\n" + "command:"+ nonPwdCmd.toString());
         out.close();

@@ -28,14 +28,20 @@ public class OptFunction {
     }
 
     public String[] run(Connection conn,String sql,int type){
+        String[] temp=sql.split("@");
+        sql=temp[0];
+        int num=100;
+        if(temp.length>1) num=Integer.parseInt(temp[1]);
+
         String[] res=new String[3];
-        JProgressBar jpb=new JProgressBar(0,100);
+        JProgressBar jpb=new JProgressBar(0,num);
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
         JButton cancel=new JButton("终止");
         panel.add(new JLabel("请稍后..."));
         cancel.addActionListener(event->{
-            i=200;flag=1;
+            i=Integer.MAX_VALUE;flag=1;
+            jFrame.dispose();
         });
         panel.add(jpb);
         panel.add(cancel);
@@ -48,7 +54,7 @@ public class OptFunction {
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
         int n=0;
-        for(i=0;i<100;++i) {
+        for(i=0;i<num;++i) {
             jpb.setValue(i);
             try {
                 long x = System.currentTimeMillis();
@@ -63,7 +69,7 @@ public class OptFunction {
             }
         }
         i=0;
-        n/=100;
+        n/=num;
         res[1]=n+"";
         EvaluationIO eio=new EvaluationIO();
         String[] t=eio.readLast();

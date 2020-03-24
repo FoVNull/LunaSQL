@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class MainThread extends Thread {
+public class    MainThread extends Thread {
     Connection conn;
     String[] sql;
     int testType;

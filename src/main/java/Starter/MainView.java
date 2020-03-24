@@ -491,13 +491,13 @@ class  ViewFrame extends JFrame{
 //                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
 //                    "注意",JOptionPane.WARNING_MESSAGE);
 
-            int evaType=JOptionPane.showOptionDialog(null,"<html>请选择使用自定义语句进行评估或使用默认语句(您可以在自定义中更改默认语句)<br>(您可以使用自定义方法针对不同的参数使用不同的用例测试，也可以不区分参数通过自定义脚本输入用例)</html>",
-                    "评估方式",JOptionPane.YES_NO_CANCEL_OPTION,1,null,new String[]{"默认","自定义","多语句/sql脚本执行"},1);
             int res = JOptionPane.showConfirmDialog(null,
                     "<html>性能评估只针对key_buffer_size,join_buffer_size,read_buffer_size,sort_buffer_size" +
                             "<br>更多参数优化需要人工调整。这个过程可能会花费一点时间，是否开始？</html>",
                     "性能评估", 2);
             if (res == 0) {
+                int evaType=JOptionPane.showOptionDialog(null,"<html>请选择使用自定义语句进行评估或使用默认语句(您可以在自定义中更改默认语句)<br>您可以使用自定义方法针对不同的参数使用不同的用例测试，也可以不区分参数通过自定义脚本输入用例</html>",
+                        "评估方式",JOptionPane.YES_NO_CANCEL_OPTION,1,null,new String[]{"默认","自定义","并发测试"},1);
                 if (evaType == 0) {
                     String[] inputSql = new String[1];
                     EvaluationIO eio = new EvaluationIO();

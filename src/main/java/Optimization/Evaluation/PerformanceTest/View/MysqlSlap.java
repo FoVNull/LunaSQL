@@ -1,12 +1,15 @@
 package Optimization.Evaluation.PerformanceTest.View;
 
+import MysqlOperation.domin.Script;
 import Optimization.Evaluation.PerformanceTest.Service.SlapCommand;
 import Optimization.Evaluation.PerformanceTest.domin.SlapLog;
 import Optimization.SqlOptimize.View.SetDataBase;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.io.File;
 
 public class MysqlSlap {
     public static JSONObject defaultDB=null;
@@ -24,11 +27,19 @@ public class MysqlSlap {
         JButton dbSetting=new JButton("配置测试库");
         JButton submit=new JButton("执行");
         JButton log=new JButton("日志");
+        JButton load=new JButton("导入sql文件");
         text1.setBounds(10,10,200,50);
         dbInfo.setBounds(200,10,200,50);
         dbSetting.setBounds(400,25,100,25);
         submit.setBounds(520,25,80,25);
         log.setBounds(620,25,70,25);
+        load.setBounds(620,75,100,25);
+
+        JTextArea sql=new JTextArea();
+        sql.setBounds(10,60,600,100);
+        sql.setLineWrap(true);        //激活自动换行功能
+        sql.setWrapStyleWord(true); // 激活断行不断字功能
+
         dbListen.addActionListener(event->{
             dbInfo.setText("测试库："+defaultDB.getString("url")+"/"+defaultDB.getString("schema")
                     +"@"+defaultDB.getString("userName"));
@@ -41,19 +52,36 @@ public class MysqlSlap {
             SlapLog sl=new SlapLog();
             sl.readLog();
         });
+        load.addActionListener(event->{
+            JFileChooser jfc=new JFileChooser();
+            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            FileFilter fft=new FileFilter(){
+                @Override
+                public boolean accept(File file){
+                    return file.getName().endsWith("sql");
+                }
 
-        JTextArea sql=new JTextArea();
-        sql.setBounds(10,60,600,100);
-        sql.setLineWrap(true);        //激活自动换行功能
-        sql.setWrapStyleWord(true); // 激活断行不断字功能
+                @Override
+                public String getDescription(){
+                    return "需要sql文件(*.sql)";
+                }
+            };
+
+            jfc.setFileFilter(fft);
+            jfc.showOpenDialog(null);
+            File inputPath=jfc.getSelectedFile();
+            if(inputPath!=null) {
+                sql.setText(inputPath.toString());
+            }
+        });
 
         JPanel toolBar=new JPanel();
         toolBar.setLayout(new GridLayout(0,2,0,0));
         toolBar.setBounds(0,20,730,200);
 
         //mysqlslap选项
-        JCheckBox autoGen=new JCheckBox("自动生产测试脚本(不使用自定义测试语句)");
-        toolBar.add(autoGen);toolBar.add(new JLabel());
+        JCheckBox autoGen=new JCheckBox("自动生成测试脚本(如果要测试已有模式请勿勾选！)");
+        toolBar.add(autoGen);toolBar.add(new JLabel("注意，自动测试会自动创建您填写的模式，结束后会删除该模式！"));
 
         String[] sqlType={"mixed","read","key","write","update"};
         JComboBox<String> type=new JComboBox(sqlType);
@@ -81,7 +109,7 @@ public class MysqlSlap {
         debug.setVisible(false);//debug功能暂时无法使用
         toolBar.add(debug);
 
-        JCheckBox onlyPrint=new JCheckBox("打印测试语句，不实际执行");
+        JCheckBox onlyPrint=new JCheckBox("打印需要执行的测试语句，不实际执行");
         toolBar.add(onlyPrint);
 
         JScrollPane scrollRes=new JScrollPane();
@@ -120,6 +148,7 @@ public class MysqlSlap {
         panel.add(submit);
         panel.add(sql);
         panel.add(log);
+        panel.add(load);
         funcPanel.add(toolBar);
 
         jFrame.add(panel);jFrame.add(funcPanel);

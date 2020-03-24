@@ -27,7 +27,7 @@ public class SlapCommand {
         String i=option.getString("iterations");
         if(!i.equals("")) cmd.append(" --iterations=").append(i);
         String e=option.getString("engine");
-        if(!e.equals("")) cmd.append(" --engine").append(e);
+        if(!e.equals("")) cmd.append(" --engine=").append(e);
 
         if((boolean)option.get("ifDebug")) cmd.append(" --debug-info");
         if((boolean)option.get("ifPrint")) cmd.append(" --only-print");

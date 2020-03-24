@@ -17,7 +17,7 @@ public class CaseCustomize {
         String[] paraName={"  join_buffer_size","  read_buffer_size","  sort_buffer_size","  key_buffer_size"};
         JTextArea[] jTextArea=new JTextArea[4];
 
-        panel.add(new JLabel("  语句可以为空"));
+        panel.add(new JLabel("  语句可以为空，格式为\"语句@执行次数\"(默认100)"));
 
         EvaluationIO eios=new EvaluationIO();
         String[] userCase=eios.readUserCase();

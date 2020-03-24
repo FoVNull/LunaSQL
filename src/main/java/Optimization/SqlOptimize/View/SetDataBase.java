@@ -56,8 +56,13 @@ public class SetDataBase {
 
         JTextField[] cusInfo=new JTextField[4];
         for(int i=0;i<cusInfo.length;++i) {
-            cusInfo[i]=new JTextField();
-            cusPanel.add(cusInfo[i]);
+            if(i!=2) {
+                cusInfo[i] = new JTextField();
+                cusPanel.add(cusInfo[i]);
+            }else{
+                cusInfo[i]=new JPasswordField();
+                cusPanel.add(cusInfo[i]);
+            }
         }
         cusPanel.add(new JLabel());
         JButton cusButton=new JButton("确认");
