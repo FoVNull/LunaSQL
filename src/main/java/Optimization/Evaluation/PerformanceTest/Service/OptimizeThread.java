@@ -15,8 +15,13 @@ public class OptimizeThread extends Thread {
 
     @Override
     public void run(){
+        String[] temp=sql.split("@");
+        sql=temp[0];
+        int num=100;
+        if(temp.length>1) num=Integer.parseInt(temp[1]);
+
         flag=0;
-        JProgressBar jpb=new JProgressBar(0,100);
+        JProgressBar jpb=new JProgressBar(0,num);
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
         JButton cancel=new JButton("终止");
@@ -36,7 +41,7 @@ public class OptimizeThread extends Thread {
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
         int n=0;
-        for(i=0;i<100;++i) {
+        for(i=0;i<num;++i) {
             if(MainThread.stopFlag) jFrame.dispose();
             jpb.setValue(i);
             try {
@@ -52,7 +57,7 @@ public class OptimizeThread extends Thread {
             }
         }
         i=0;
-        n/=100;
+        n/=num;
 
         jFrame.dispose();
         MainThread.sumOfMulti+=n;

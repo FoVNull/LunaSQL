@@ -395,7 +395,7 @@ class  ViewFrame extends JFrame{
             JOptionPane.showMessageDialog(null,
                     "<html>所有的日志文件存储于LunaSQL/classes/LunaLOG文件夹中<br>" +
                             "sql优化使用的是soar，Credit：github.com/XiaoMi<br>" +
-                            "您可以在安装文件夹中找到soar.exe并使用它，文档参见上述Credit地址</html>",
+                            "您可以在安装文件夹中找到soar.exe并使用它，文档参见上述地址</html>",
                     "帮助",
                     JOptionPane.PLAIN_MESSAGE
             );
@@ -404,7 +404,7 @@ class  ViewFrame extends JFrame{
         news.addActionListener(event->{
             JOptionPane.showMessageDialog(
                     null,
-                    "<html>本软件仅供学习交流使用<br>Credit：hikki.top<br>@fovnull 2020</html>",
+                    "<html>本软件仅供学习交流使用(For educational use only)，完全遵循GPL协议<br>Credit：hikki.top<br>@fovnull 2020</html>",
                     "制作者信息",
                     JOptionPane.PLAIN_MESSAGE
             );
@@ -434,17 +434,11 @@ class  ViewFrame extends JFrame{
 
 
         logConsole.addActionListener(event->{
-//            if(connectingCount>0) JOptionPane.showMessageDialog(null,
-//                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
-//                    "注意",JOptionPane.WARNING_MESSAGE);
             LogConsoleView logConsoleView = new LogConsoleView();
             logConsoleView.logConsoleDriver(connecting[connectingCount]);
         });
 
         generalLog.addActionListener(event->{
-//            if(connectingCount>0) JOptionPane.showMessageDialog(null,
-//                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
-//                    "注意",JOptionPane.WARNING_MESSAGE);
             LogReader logReader=new LogReader();
             ResultSet logRs=null;
             try {
@@ -461,25 +455,16 @@ class  ViewFrame extends JFrame{
         });
 
         slowLog.addActionListener(event->{
-//            if(connectingCount>0) JOptionPane.showMessageDialog(null,
-//                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
-//                    "注意",JOptionPane.WARNING_MESSAGE);
             LogReader logReader=new LogReader();
             logReader.getSLog(connecting[connectingCount]);
         });
 
         errLog.addActionListener(event->{
-//            if(connectingCount>0) JOptionPane.showMessageDialog(null,
-//                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
-//                    "注意",JOptionPane.WARNING_MESSAGE);
             LogReader logReader=new LogReader();
             logReader.getELog(connecting[connectingCount]);
         });
 
         parameterEdit.addActionListener(event->{
-//            if(connectingCount>0) JOptionPane.showMessageDialog(null,
-//                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
-//                    "注意",JOptionPane.WARNING_MESSAGE);
             ParameterView parameterView=new ParameterView();
             parameterView.paraDriver(connecting[connectingCount]);
         });
@@ -491,26 +476,21 @@ class  ViewFrame extends JFrame{
 //                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
 //                    "注意",JOptionPane.WARNING_MESSAGE);
 
-            int res = JOptionPane.showConfirmDialog(null,
-                    "<html>性能评估只针对key_buffer_size,join_buffer_size,read_buffer_size,sort_buffer_size" +
-                            "<br>更多参数优化需要人工调整。这个过程可能会花费一点时间，是否开始？</html>",
-                    "性能评估", 2);
-            if (res == 0) {
-                int evaType=JOptionPane.showOptionDialog(null,"<html>请选择使用自定义语句进行评估或使用默认语句(您可以在自定义中更改默认语句)<br>您可以使用自定义方法针对不同的参数使用不同的用例测试，也可以不区分参数通过自定义脚本输入用例</html>",
-                        "评估方式",JOptionPane.YES_NO_CANCEL_OPTION,1,null,new String[]{"默认","自定义","并发测试"},1);
-                if (evaType == 0) {
-                    String[] inputSql = new String[1];
-                    EvaluationIO eio = new EvaluationIO();
-                    inputSql[0] = eio.readDefault();
-                    ParaEvaluation ao = new ParaEvaluation();
-                    ao.autoTest(connecting[connectingCount], inputSql, 0);
-                } else if (evaType == 1) {
-                    CaseCustomize caseCustomize = new CaseCustomize();
-                    caseCustomize.frameDriver(connecting[connectingCount]);
-                } else {
-                    MultiCases multiCases = new MultiCases();
-                    multiCases.driver(connecting[connectingCount]);
-                }
+
+            int evaType=JOptionPane.showOptionDialog(null,"<html>请选择使用自定义语句进行评估或使用默认语句(您可以在自定义中更改默认语句)<br>您可以使用自定义方法针对不同的参数使用不同的用例测试，也可以不区分参数通过自定义脚本输入用例</html>",
+                    "评估方式",JOptionPane.YES_NO_CANCEL_OPTION,1,null,new String[]{"默认","自定义","并发测试"},1);
+            if (evaType == 0) {
+                String[] inputSql = new String[1];
+                EvaluationIO eio = new EvaluationIO();
+                inputSql[0] = eio.readDefault();
+                ParaEvaluation ao = new ParaEvaluation();
+                ao.autoTest(connecting[connectingCount], inputSql, 0);
+            } else if (evaType == 1) {
+                CaseCustomize caseCustomize = new CaseCustomize();
+                caseCustomize.frameDriver(connecting[connectingCount]);
+            } else if(evaType==2) {
+                MultiCases multiCases = new MultiCases();
+                multiCases.driver(connecting[connectingCount]);
             }
         });
 

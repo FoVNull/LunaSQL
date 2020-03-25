@@ -14,6 +14,7 @@ public class MultiCases {
     public void driver(Connection conn){
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
+        JScrollPane scrollPane=new JScrollPane();
 
         JTextArea sql=new JTextArea();
         sql.setLineWrap(true);        //激活自动换行功能
@@ -23,16 +24,19 @@ public class MultiCases {
 
         panel.setLayout(null);
 
-        JLabel info=new JLabel("sql语句之间使用分号间隔");
+        JLabel info=new JLabel("sql语句之间使用分号间隔，若要指定执行次数请在分号前加上 @次数");
 
         panel.setBounds(0,0,500,400);
-        info.setBounds(0,5,200,40);
-        sql.setBounds(10,60,400,250);
+        info.setBounds(0,5,400,40);
+        scrollPane.setBounds(10,60,400,250);
+        sql.setBounds(0,0,400,250);
         script.setBounds(420,270,100,30);
         commit.setBounds(230,320,60,30);
 
+        scrollPane.setViewportView(sql);
+
         panel.add(info);
-        panel.add(sql);
+        panel.add(scrollPane);
 
         commit.addActionListener(event->{
             if(sql.getText().equals("")){
