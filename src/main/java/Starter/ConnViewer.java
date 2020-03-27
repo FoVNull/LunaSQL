@@ -119,11 +119,9 @@ class ConnViewerFrame extends JFrame {
             catch (Exception e){
                 if(e.getMessage().contains("Access denied for user")){
                     JOptionPane.showMessageDialog(null, "用户名或密码错误",title,JOptionPane.ERROR_MESSAGE);
-                    //System.out.print(sw.toString());
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "地址错误", title, JOptionPane.ERROR_MESSAGE);
-                    System.out.println(e.toString());
+                    JOptionPane.showMessageDialog(null, "地址错误", title, JOptionPane.ERROR_MESSAGE);              
                 }
             }
         });
