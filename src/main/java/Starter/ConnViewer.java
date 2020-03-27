@@ -156,7 +156,7 @@ class ConnViewerFrame extends JFrame {
                         ViewFrame.listButton.doClick();
                         this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING) );
                     }
-                } catch (Exception e) {
+                } catch (SQLException e) {
                     if (e.getMessage().contains("Access denied for user")) {                    
                         JOptionPane.showMessageDialog(null, "用户名或密码错误", " ", JOptionPane.ERROR_MESSAGE);
                     } else {
