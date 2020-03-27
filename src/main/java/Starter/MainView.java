@@ -1,5 +1,6 @@
 package Starter;
 
+import DBConn.ConnMange;
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
 import MysqlOperation.domin.Script;
@@ -70,6 +71,7 @@ public class MainView {
     }
 }
 class  ViewFrame extends JFrame{
+    ReadInfo ri=new ReadInfo();
     private JLabel mainView=new JLabel();
     private JLabel dbList=new JLabel();
     private JToolBar toolBar=new JToolBar();
@@ -211,8 +213,8 @@ class  ViewFrame extends JFrame{
 
 
         root=new DefaultMutableTreeNode("数据库连接列表");
-        for(int n=0;n<ReadInfo.readInfo().length();n++) {
-            connNode=new DefaultMutableTreeNode(ReadInfo.readInfo().getJSONObject(n).getString("connName"));
+        for(int n=0;n<ri.readInfo().length();n++) {
+            connNode=new DefaultMutableTreeNode(ri.readInfo().getJSONObject(n).getString("connName"));
             root.add(connNode);
         }
         //tree.updateUI();
@@ -297,7 +299,9 @@ class  ViewFrame extends JFrame{
         optimize.add(overWrite);
 
         JMenuItem mysql=new JMenuItem("Mysql");
+        JMenuItem manageConn=new JMenuItem("管理连接");
         dbType.add(mysql);
+        dbType.add(manageConn);
 
         JMenuItem newQuery =new JMenuItem("自定义sql");
         JMenuItem openQuery =new JMenuItem("打开sql文件");
@@ -312,6 +316,10 @@ class  ViewFrame extends JFrame{
         newQuery.addActionListener(event->{
             CustomSql customSql=new CustomSql();
             customSql.customSqlDriver(connecting[connectingCount]);
+        });
+        manageConn.addActionListener(event->{
+            ConnMange cm=new ConnMange();
+            cm.driver();
         });
         //自定义sql监听-----
         cusListener.addActionListener(event->{
@@ -554,12 +562,12 @@ class  ViewFrame extends JFrame{
             else{
                 DefaultMutableTreeNode temp;
                 temp=(DefaultMutableTreeNode)path.getPathComponent(1);
-                for(int i=0;i<ReadInfo.readInfo().length();i++) {
-                    if(ReadInfo.readInfo().getJSONObject(i).getString("connName").equals(temp.getUserObject())){
-                        connectingName=ReadInfo.readInfo().getJSONObject(i).getString("userName");
-                        connectingPsw=ReadInfo.readInfo().getJSONObject(i).getString("psw");
-                        connectingUrl=ReadInfo.readInfo().getJSONObject(i).getString("url");
-                        connectingType=ReadInfo.readInfo().getJSONObject(i).getString("type");
+                for(int i=0;i<ri.readInfo().length();i++) {
+                    if(ri.readInfo().getJSONObject(i).getString("connName").equals(temp.getUserObject())){
+                        connectingName=ri.readInfo().getJSONObject(i).getString("userName");
+                        connectingPsw=ri.readInfo().getJSONObject(i).getString("psw");
+                        connectingUrl=ri.readInfo().getJSONObject(i).getString("url");
+                        connectingType=ri.readInfo().getJSONObject(i).getString("type");
                     }
                 }
                 MysqlConn mysqlConn = new MysqlConn();
@@ -595,8 +603,8 @@ class  ViewFrame extends JFrame{
             if(temp.toString().contains("--正在运行")) {
                 try {
                     boolean isTemp=true;
-                    for(int i=0;i<ReadInfo.readInfo().length();i++) {
-                        if (ReadInfo.readInfo().getJSONObject(i).getString("connName").equals(str)) {
+                    for(int i=0;i<ri.readInfo().length();i++) {
+                        if (ri.readInfo().getJSONObject(i).getString("connName").equals(str)) {
                             isTemp=false;break;
                         }
                     }
