@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import DBConn.SaveInfo;
 
@@ -117,12 +116,14 @@ class ConnViewerFrame extends JFrame {
                 JOptionPane.showMessageDialog(null, "连接成功", title, JOptionPane.PLAIN_MESSAGE);
                 tempConn.close();
             }
-            catch (SQLException e){
+            catch (Exception e){
                 if(e.getMessage().contains("Access denied for user")){
                     JOptionPane.showMessageDialog(null, "用户名或密码错误",title,JOptionPane.ERROR_MESSAGE);
+                    //System.out.print(sw.toString());
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "地址错误", title, JOptionPane.ERROR_MESSAGE);
+                    System.out.println(e.toString());
                 }
             }
         });
