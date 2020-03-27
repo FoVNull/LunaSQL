@@ -1,12 +1,19 @@
 package DBConn;
 
+import javax.swing.*;
 import java.sql.*;
 
 public class MysqlConn {
-    public Connection conn(String url,String user,String password)throws ClassNotFoundException, SQLException{
+    public Connection conn(String url,String user,String password)throws SQLException{
         String forword="jdbc:mysql://";String backward="?useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true";
         //Class.forName("com.mysql.jdbc.Driver");
-        Class.forName("com.mysql.cj.jdbc.Driver");//8以上的版本用这个驱动
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");//8以上的版本用这个驱动
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"系统错误！",
+            "请报告JKL4131@126.com",JOptionPane.ERROR_MESSAGE);
+        }
         Connection conn=DriverManager.getConnection(forword+url+backward, user, password);
         return conn;
     }
