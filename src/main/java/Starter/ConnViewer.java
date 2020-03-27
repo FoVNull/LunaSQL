@@ -159,12 +159,9 @@ class ConnViewerFrame extends JFrame {
                         this.dispatchEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING) );
                     }
                 } catch (Exception e) {
-                    if (e.getMessage().contains("Access denied for user")) {
-                        //connTest.driver("用户名或密码错误", title);
-                        //System.out.print(sw.toString());
+                    if (e.getMessage().contains("Access denied for user")) {                    
                         JOptionPane.showMessageDialog(null, "用户名或密码错误", " ", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        //connTest.driver("地址错误", title);
                         JOptionPane.showMessageDialog(null, "地址错误", " ", JOptionPane.ERROR_MESSAGE);
                     }
                 }
