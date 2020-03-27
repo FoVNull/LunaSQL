@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SetDataBase {
+    ReadInfo ri=new ReadInfo();
 
     public void driver(String type){
         JFrame jFrame=new JFrame();
@@ -23,7 +24,7 @@ public class SetDataBase {
         panel.add(new JLabel("模式(数据库)"));
         panel.add(new JLabel());
 
-        JSONArray dbList= ReadInfo.readInfo();
+        JSONArray dbList= ri.readInfo();
         int len=dbList.length();
         JRadioButton[] buttons=new JRadioButton[dbList.length()+1];
         JTextField[] schemaName=new JTextField[dbList.length()];

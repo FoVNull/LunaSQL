@@ -33,7 +33,7 @@ public class SoarLog {
             }
         }else nonPwdCmd.append(cmd);
         Writer out = new FileWriter(file1, true);
-        out.write(text + "\r\n" + "command:"+ (nonPwdCmd.toString()));
+        out.write(text + "\r\n" + "command:"+  nonPwdCmd.toString());
         out.close();
     }
     public void readLog(){

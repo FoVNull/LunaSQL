@@ -2,36 +2,38 @@ package Optimization.SqlOptimize.domin;
 
 import Optimization.Evaluation.PerformanceTest.domin.SlapLog;
 
+import javax.swing.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CmdExcute {
     public String excuteCmd(String cmd,String type){
-        String res;
+        StringBuilder res=new StringBuilder();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        res="\r\n"+"=".repeat(20)+df.format(new Date())+"\r\n";//使用字符串拼接而非stringbuilder是因为字符编码问题
+        res.append("\r\n").append("=".repeat(20)).append(df.format(new Date())).append("\r\n");
         try{
             Process p = Runtime.getRuntime().exec("cmd.exe /c "+cmd);
             //win↑  linux↓
             //Process p = Runtime.getRuntime().exec(cmd);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(),StandardCharsets.UTF_8));
             String line="";
             while ((line = br.readLine()) != null) {
-               res+=line + "\n";
+                res.append(line).append("\n");
             }
             br.close();
             if(type.equals("soar")) {
                 SoarLog sl = new SoarLog();
-                sl.writeLog(res, cmd);
+                sl.writeLog(res.toString(), cmd);
             }else{
                 SlapLog sl=new SlapLog();
-                sl.writeLog(res,cmd);
+                sl.writeLog(res.toString(),cmd);
             }
         }catch (IOException e){
             e.printStackTrace();
         }
-        return res;
+        return res.toString();
     }
 }
