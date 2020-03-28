@@ -814,10 +814,10 @@ class  ViewFrame extends JFrame{
                             int pkCount=query1.queryPK(connecting[connectingCount], dbName, temp).length;
                             String[] pkName=query1.queryPK(connecting[connectingCount], dbName, temp);
                             if(pkCount!=0) {
-                                updateSQL[sqlCount[tabIndex]] = "UPDATE " + dbName + "." + temp + " SET " + table[tabIndex].getColumnName(e.getColumn()) + "='" +
-                                        table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()).toString() + "' WHERE ";
+                                updateSQL[sqlCount[tabIndex]] = "UPDATE " + dbName + "." + temp + " SET " + table[tabIndex].getColumnName(e.getColumn()) +
+									"='" +table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()).toString() + "' WHERE ";
                                 updateSQL[sqlCount[tabIndex]] += pkName[0] + "='" + tempTable[tabIndex].getValueAt(e.getLastRow(), 0) + "'";
-                                for (int i = 1; i < pkCount; i++) {
+                                for (int i = 1; i < pkCount;++i) {
                                     updateSQL[sqlCount[tabIndex]] += "AND " + pkName[i] + "='" + tempTable[tabIndex].getValueAt(e.getLastRow(), i) + "'";
                                 }
                                 tempTable[tabIndex].setValueAt(table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()), e.getLastRow(), e.getColumn());
@@ -829,7 +829,7 @@ class  ViewFrame extends JFrame{
                                     updateSQL[sqlCount[tabIndex]]= "UPDATE "+dbName+"."+temp+" SET "+table[tabIndex].getColumnName(e.getColumn()) +
 									"='"+table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()).toString() + "' WHERE ";
                                     updateSQL[sqlCount[tabIndex]] +=table[tabIndex].getColumnName(0)+"='"+tempTable[tabIndex].getValueAt(e.getLastRow(),0)+"'";
-                                    for(int i=1;i<table[tabIndex].getColumnCount();i++){
+                                    for(int i=1;i<table[tabIndex].getColumnCount();++i){
                                         updateSQL[sqlCount[tabIndex]] +="AND "+table[tabIndex].getColumnName(i)+
 										"='"+tempTable[tabIndex].getValueAt(e.getLastRow(),i)+"'";
                                     }
