@@ -113,20 +113,18 @@ public class TableStructure extends JRadioButton {
                 }
             });
 
-            indexEx[i]=new JButton("nan");
+            indexEx[i]=new JButton("添加索引");
             ifNonUniq[i]=new JCheckBox();
             indexName[i]=new JTextField("无");
             for(int j=0;j<indexs.length();++j) {
-                boolean flag=false;
                 if(indexs.getJSONObject(j).getString("columnName").equals(rs.getString(1))){
-                    indexEx[i].setText("删除索引");flag=true;
+                    indexEx[i].setText("删除索引");
                     if(indexs.getJSONObject(j).getString("nonUnique").equals("0")) ifNonUniq[i].setSelected(true);
                     ifNonUniq[i].setEnabled(false);
                     indexName[i].setText(indexs.getJSONObject(j).getString("indexName"));
                     indexName[i].setEditable(false);
                     break;
                 }
-                if(!flag) indexEx[i].setText("添加索引");
             }
             structurePanel.add(indexName[i]);
             structurePanel.add(ifNonUniq[i]);

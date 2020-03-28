@@ -65,9 +65,10 @@ public class EvaluationIO {
     }
 
     public void setDefault(String sql){
+        System.out.println(sql);
         StringBuilder path= Location.Path.getPath();
         path.append("classes/LunaLOG/defaultcase.txt");
-        File file = new File("C:" + File.separator + "LunaSQL" + File.separator + "defaultcase.txt");
+        File file = new File(path.toString());
         try{
             if(!file.exists()){
                 file.createNewFile();
