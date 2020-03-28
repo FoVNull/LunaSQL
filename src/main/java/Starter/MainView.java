@@ -806,7 +806,6 @@ class  ViewFrame extends JFrame{
                 @Override
                 public void tableChanged(TableModelEvent e) {
                     if(e.getType()==TableModelEvent.UPDATE){
-                        //System.out.println(table[tabIndex].getValueAt(e.getLastRow(),e.getColumn()).toString());
                         confirmTool[tabIndex].setEnabled(true);
                         cancelTool[tabIndex].setEnabled(true);
                         sqlCount[tabIndex]++;
@@ -821,18 +820,18 @@ class  ViewFrame extends JFrame{
                                 for (int i = 1; i < pkCount; i++) {
                                     updateSQL[sqlCount[tabIndex]] += "AND " + pkName[i] + "='" + tempTable[tabIndex].getValueAt(e.getLastRow(), i) + "'";
                                 }
-                                //System.out.println(updateSQL[tabIndex][sqlCount[tabIndex]]);
                                 tempTable[tabIndex].setValueAt(table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()), e.getLastRow(), e.getColumn());
                             }
                             else{
                                 int result=JOptionPane.showConfirmDialog(null,"此表未设置主键，建议您设置主键，继续可能会引发更新错误，是否继续？",
                                         "未设置主键!",JOptionPane.YES_NO_OPTION);
                                 if(result!=1){
-                                    updateSQL[sqlCount[tabIndex]]= "UPDATE "+dbName+"."+temp+" SET "+table[tabIndex].getColumnName(e.getColumn()) +"='"+
-                                            table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()).toString() + "' WHERE ";
+                                    updateSQL[sqlCount[tabIndex]]= "UPDATE "+dbName+"."+temp+" SET "+table[tabIndex].getColumnName(e.getColumn()) +
+									"='"+table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()).toString() + "' WHERE ";
                                     updateSQL[sqlCount[tabIndex]] +=table[tabIndex].getColumnName(0)+"='"+tempTable[tabIndex].getValueAt(e.getLastRow(),0)+"'";
                                     for(int i=1;i<table[tabIndex].getColumnCount();i++){
-                                        updateSQL[sqlCount[tabIndex]] +="AND "+table[tabIndex].getColumnName(i)+"='"+tempTable[tabIndex].getValueAt(e.getLastRow(),i)+"'";
+                                        updateSQL[sqlCount[tabIndex]] +="AND "+table[tabIndex].getColumnName(i)+
+										"='"+tempTable[tabIndex].getValueAt(e.getLastRow(),i)+"'";
                                     }
                                     tempTable[tabIndex].setValueAt(table[tabIndex].getValueAt(e.getLastRow(), e.getColumn()), e.getLastRow(), e.getColumn());
                                 }
