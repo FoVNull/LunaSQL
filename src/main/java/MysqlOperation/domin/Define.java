@@ -1,5 +1,6 @@
 package MysqlOperation.domin;
 
+import DBConn.ConnMange;
 import org.json.JSONArray;
 
 import javax.swing.*;
@@ -35,21 +36,30 @@ public class Define {
         String sql;
         PreparedStatement pst;
         for(int n=0;n<columnCount;n++) {
+            if(length[n].equals(""))
             if(nullable[n]) {
-                sql = "ALTER TABLE " + dbName+"."+tableName + " MODIFY " + columnName[n] + " " + columnType[n] + "(" + length[n] + ") DEFAULT NULL; ";
+                if(!length[n].equals(""))
+                    sql = "ALTER TABLE " + dbName+"."+tableName + " MODIFY `" + columnName[n] + "` " + columnType[n] + "(" + length[n] + ") DEFAULT NULL; ";
+                else{
+                    sql = "ALTER TABLE " + dbName+"."+tableName + " MODIFY `" + columnName[n] + "` " + columnType[n] + " DEFAULT NULL; ";
+                }
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.executeUpdate();
             }
             else {
-                sql = "ALTER TABLE " + dbName+"."+tableName + " MODIFY " + columnName[n] + " " + columnType[n] + "(" + length[n] + ") NOT NULL;";
+                sql = "ALTER TABLE " + dbName+"."+tableName + " MODIFY `" + columnName[n] + "` " + columnType[n] + "(" + length[n] + ") NOT NULL;";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.executeUpdate();
             }
-            if(pk[n]){
-                sql="ALTER TABLE "+ dbName+"."+tableName +" DROP PRIMARY KEY";
-                pst = (PreparedStatement) conn.prepareStatement(sql);
-                pst.executeUpdate();
-                sql="ALTER TABLE "+ dbName+"."+tableName +" ADD PRIMARY KEY ("+columnName[n]+")";
+            if(pk[n]) {
+                try{
+                    sql = "ALTER TABLE " + dbName + "." + tableName + " DROP PRIMARY KEY";
+                    pst = (PreparedStatement) conn.prepareStatement(sql);
+                    pst.executeUpdate();
+                }catch (SQLException e){
+
+                }
+                sql="ALTER TABLE "+ dbName+"."+tableName +" ADD PRIMARY KEY (`"+columnName[n]+"`)";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.executeUpdate();
             }
@@ -71,5 +81,9 @@ public class Define {
                     "Error",JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+
+    public void createTable(Connection conn){
+
     }
 }
