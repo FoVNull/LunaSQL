@@ -3,7 +3,8 @@ package Starter;
 import DBConn.ConnMange;
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
-import MysqlOperation.domin.Script;
+import MysqlOperation.View.CreateTable;
+import MysqlOperation.domin.*;
 import Optimization.Evaluation.PerformanceTest.View.MysqlSlap;
 import Optimization.LogAnalyses.domin.LogReader;
 import Optimization.LogAnalyses.View.LogConsoleView;
@@ -11,10 +12,7 @@ import Optimization.Evaluation.PerformanceTest.View.CaseCustomize;
 import Optimization.Evaluation.PerformanceTest.View.MultiCases;
 import Optimization.Evaluation.ParameterOpt.View.ParameterView;
 import MysqlOperation.View.TableStructure;
-import MysqlOperation.domin.Delete;
 import MysqlOperation.View.InsertInfo;
-import MysqlOperation.domin.Query;
-import MysqlOperation.domin.Update;
 import Optimization.Evaluation.PerformanceTest.View.ParaEvaluation;
 import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
 import Optimization.SqlOptimize.View.SoarConsole;
@@ -637,10 +635,12 @@ class  ViewFrame extends JFrame{
         JMenuItem openDBConn=new JMenuItem("打开模式");
         JMenuItem closeDBConn=new JMenuItem("关闭模式");
         JMenuItem creatTabel=new JMenuItem("创建新表");
+        JMenuItem refreshSchema=new JMenuItem("刷新");
         connNodeMunu=new JPopupMenu();
         connNodeMunu.add(openDBConn);
         connNodeMunu.add(closeDBConn);
         connNodeMunu.add(creatTabel);
+        connNodeMunu.add(refreshSchema);
 
         openDBConn.addActionListener(event->{
             int itemNodeCount=0;
@@ -690,12 +690,26 @@ class  ViewFrame extends JFrame{
         closeDBConn.addActionListener(event->{
             DefaultMutableTreeNode temp;
             temp=(DefaultMutableTreeNode)path.getPathComponent(2);
-            //temp.setUserObject(temp.getUserObject().toString().split("-")[0]);
-            for(int i=0;i<3;i++){
+            for(int i=0;i<1;i++){//根据schema下属的子菜单个数
                 temp.remove(0);
             }
             tree.updateUI();
         });
+
+        creatTabel.addActionListener(event->{
+            DefaultMutableTreeNode temp;
+            temp=(DefaultMutableTreeNode)path.getPathComponent(2);
+            DefaultMutableTreeNode tempConn = (DefaultMutableTreeNode) path.getPathComponent(1);
+            int schemaCounting = tempConn.getParent().getIndex(tempConn);
+            CreateTable createTable=new CreateTable();
+            createTable.driver(connecting[schemaCounting],temp.getUserObject().toString());
+        });
+
+        refreshSchema.addActionListener(event->{
+            closeDBConn.doClick();
+            openDBConn.doClick();
+        });
+
         connNodeMunu.show(tree,x,y);
     }
     private void openTable(int x,int y,TreePath path){
@@ -703,13 +717,11 @@ class  ViewFrame extends JFrame{
         JMenuItem insertValue=new JMenuItem("插入记录");
         JMenuItem tableStructure=new JMenuItem("表结构操作");
         JMenuItem deleteTable=new JMenuItem("删除选定表格");
-        //JMenuItem indexs=new JMenuItem("索引管理");
         connNodeMunu=new JPopupMenu();
         connNodeMunu.add(query200);
         connNodeMunu.add(insertValue);
         connNodeMunu.add(tableStructure);
         connNodeMunu.add(deleteTable);
-        //connNodeMunu.add(indexs);
 
         tableStructure.addActionListener(event->{
             DefaultMutableTreeNode temp;
@@ -771,6 +783,24 @@ class  ViewFrame extends JFrame{
                  JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        deleteTable.addActionListener(event->{
+            DefaultMutableTreeNode temp;
+            temp=(DefaultMutableTreeNode)path.getPathComponent(4);
+            DefaultMutableTreeNode tempConn = (DefaultMutableTreeNode) path.getPathComponent(1);
+            DefaultMutableTreeNode dbName = (DefaultMutableTreeNode) path.getPathComponent(2);
+            connectingCount = tempConn.getParent().getIndex(tempConn);
+            int res=JOptionPane.showConfirmDialog(null,"确认删除"+temp.getUserObject().toString()+"吗？",
+                    "数据表删除",JOptionPane.YES_NO_OPTION);
+            if(res==0) {
+                DefaultMutableTreeNode dt = (DefaultMutableTreeNode) path.getPathComponent(3);
+                dt.remove(temp);
+                tree.updateUI();
+                Delete delete = new Delete();
+                delete.deleteTable(connecting[connectingCount], dbName.getUserObject().toString(), temp.getUserObject().toString());
+            }
+        });
+
         connNodeMunu.show(tree,x,y);
     }
 

@@ -83,7 +83,19 @@ public class Define {
         }
     }
 
-    public void createTable(Connection conn){
-
+    public boolean createTable(Connection conn,String sql){
+        try{
+            PreparedStatement pst;
+            pst=conn.prepareStatement(sql);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null,"创建成功！",
+                    "Message",JOptionPane.PLAIN_MESSAGE);
+            return true;
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null,"<html>"+e.getMessage()+"</html>",
+                    "Error",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return false;
+        }
     }
 }

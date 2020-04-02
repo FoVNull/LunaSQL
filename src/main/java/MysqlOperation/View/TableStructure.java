@@ -17,9 +17,7 @@ import java.sql.SQLException;
 public class TableStructure extends JRadioButton {
     private JFrame frame = new JFrame();
     private JPanel structurePanel=new JPanel();
-    ButtonGroup bg = new ButtonGroup();
     private JButton confirm=new JButton("提交更改");
-    private JButton clear=new JButton("清除选择");
     private JButton add=new JButton("新建字段");
     public JSONArray info=new JSONArray();
     public JSONObject infoObject=new JSONObject();
@@ -33,7 +31,7 @@ public class TableStructure extends JRadioButton {
         rs.beforeFirst();
 
         JTextField[] columnName=new JTextField[columnCount];
-        JRadioButton[] pk=new JRadioButton[columnCount];
+        JCheckBox[] pk=new JCheckBox[columnCount];
         JCheckBox[] ifNull=new JCheckBox[columnCount];
         JComboBox[] columnType=new JComboBox[columnCount];
         JTextField[] columnLength=new JTextField[columnCount];
@@ -81,8 +79,7 @@ public class TableStructure extends JRadioButton {
                     }
                 }
             }
-            pk[i]=new JRadioButton();
-            bg.add(pk[i]);
+            pk[i]=new JCheckBox();
             if(pkName.length!=0){
                 for(int a=0;a<pkName.length;a++){
                     if(pkName[a].equals(rs.getString(1))){
@@ -154,15 +151,8 @@ public class TableStructure extends JRadioButton {
             });
         }
         structurePanel.add(confirm);
-        structurePanel.add(clear);
         structurePanel.add(add);
-        clear.addActionListener(event->{
-            int res=JOptionPane.showConfirmDialog(null,
-                    "无主键可能存在安全风险是否继续？","提示",JOptionPane.YES_NO_OPTION);
-            if(res!=1){
-                bg.clearSelection();
-            }
-        });
+
         confirm.addActionListener(event->{
             for(int i=0;i<columnCount;i++) {
                 infoObject.put("name", columnName[i].getText());
@@ -189,10 +179,8 @@ public class TableStructure extends JRadioButton {
                 frame.setVisible(false);
             }
             catch (Exception ex){
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                ex.printStackTrace(pw);
-                System.out.print(sw.toString());
+                JOptionPane.showMessageDialog(null,ex.getMessage(),
+                        "Error",JOptionPane.ERROR_MESSAGE);
             }
         });
         add.addActionListener(event->{
