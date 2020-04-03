@@ -43,9 +43,12 @@ public class CreateTable {
         ArrayList<NewColumn> columnList=new ArrayList<>();
         NewColumn first = new NewColumn();
         columnList.add(first);
-        for(Component o:first.getComponent()) {
-            columnInfo.add(o);
-        }
+        first.ifPK.addActionListener(event->{
+            if (first.ifPK.isSelected()) {
+                first.ifNull.setSelected(true);
+            }
+        });
+        for(Component o:first.getComponent()) columnInfo.add(o);
 
         columnPane.setBounds(50,100,600,40);
         columnInfo.setLayout(new GridLayout(0,5,0,0));
@@ -65,9 +68,13 @@ public class CreateTable {
         addColumn.addActionListener(event->{
             NewColumn newColumn = new NewColumn();
             columnList.add(newColumn);
-            for(Component o:newColumn.getComponent()) {
-                columnInfo.add(o);
-            }
+            newColumn.ifPK.addActionListener(e-> {
+                if (newColumn.ifPK.isSelected()){
+                    newColumn.ifNull.setSelected(true);
+                }
+            });
+            for(Component o:newColumn.getComponent()) columnInfo.add(o);
+
             int len=Math.min(columnList.size()*40, 400);
             columnPane.setBounds(50,100,600,len);
             columnInfo.updateUI();
