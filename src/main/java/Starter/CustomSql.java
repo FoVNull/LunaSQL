@@ -40,10 +40,21 @@ public class CustomSql{
         StyleConstants.setForeground(style,Color.BLUE);
         StyleConstants.setBold(style, true);
 
+        Style defaultStyle=sql.addStyle("DEFAULT",null);
+        StyleConstants.setForeground(defaultStyle,Color.black);
+        StyleConstants.setBold(defaultStyle, false);
+
         sql.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 StyledDocument doc=(StyledDocument) sql.getDocument();
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        doc.setCharacterAttributes(0, doc.getLength(),
+                                sql.getStyle("DEFAULT"), true);
+                    }
+                });
                 int flag=0;
                 for (int i = 0; i < sql.getDocument().getLength(); i++) {
                     try {
