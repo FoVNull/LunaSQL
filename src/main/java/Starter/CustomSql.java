@@ -1,13 +1,14 @@
 package Starter;
 
 import MysqlOperation.Entity.CusRes;
+import MysqlOperation.Entity.SqlKeywords;
 import MysqlOperation.domin.Customize;
 import MysqlOperation.domin.Insert;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.*;
 import javax.swing.text.html.HTMLDocument;
 
 import java.awt.*;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 public class CustomSql{
     private JFrame frame=new JFrame();
     private JPanel panel;
-    private JTextArea sql;
+    private JTextPane sql;
     private JButton excute;
     private JScrollPane console;
     private JTextPane feedback;
@@ -33,7 +34,54 @@ public class CustomSql{
         feedback=new JTextPane();
         feedback.setEditable(false);
         sqlPanel=new JScrollPane();
-        sql=new JTextArea();
+        sql=new JTextPane();
+
+        Style style=sql.addStyle("BLUE",null);
+        StyleConstants.setForeground(style,Color.BLUE);
+        StyleConstants.setBold(style, true);
+
+        sql.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                StyledDocument doc=(StyledDocument) sql.getDocument();
+                int flag=0;
+                for (int i = 0; i < sql.getDocument().getLength(); i++) {
+                    try {
+                        String nowChar=sql.getDocument().getText(i,1);
+                        if(nowChar.equals(" ")||nowChar.equals("\n")
+                                ||nowChar.equals("(")||nowChar.equals(";")) {
+                            String s = sql.getDocument().getText(flag, i - flag);
+                            for (SqlKeywords skw : SqlKeywords.values()) {
+                                if (skw.toString().equals(s) || skw.getLowWord(skw).equals(s)) {
+                                    int finalFlag = flag;
+                                    int finalI = i;
+                                    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            doc.setCharacterAttributes(finalFlag, finalI - finalFlag, sql.getStyle("BLUE"), true);
+                                        }
+                                    });
+                                }
+                            }
+                            flag = i + 1;
+                        }
+                    } catch (BadLocationException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
+
 
         panel.setBounds(0,0,650,350);
         panel.setLayout(null);
@@ -41,9 +89,7 @@ public class CustomSql{
         feedback.setBounds(10,10,600,300);
         sqlPanel.setBounds(10,50,600,270);
 
-        sql.setTabSize(4);
-        sql.setLineWrap(true);        //激活自动换行功能
-        sql.setWrapStyleWord(true); // 激活断行不断字功能
+
         sql.setBounds(0,0,600,270);
         sqlPanel.setViewportView(sql);
 
@@ -54,8 +100,8 @@ public class CustomSql{
         label.setBounds(140,10,200,25);
         panel.add(label);
 
-
         panel.add(sqlPanel);
+
 
         console.setViewportView(feedback);
         frame.add(console);
