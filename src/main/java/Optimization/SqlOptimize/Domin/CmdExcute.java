@@ -2,7 +2,6 @@ package Optimization.SqlOptimize.domin;
 
 import Optimization.Evaluation.PerformanceTest.domin.SlapLog;
 
-import javax.swing.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;

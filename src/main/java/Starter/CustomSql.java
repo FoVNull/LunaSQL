@@ -3,7 +3,6 @@ package Starter;
 import MysqlOperation.Entity.CusRes;
 import MysqlOperation.Entity.SqlKeywords;
 import MysqlOperation.domin.Customize;
-import MysqlOperation.domin.Insert;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -12,13 +11,9 @@ import javax.swing.text.*;
 import javax.swing.text.html.HTMLDocument;
 
 import java.awt.*;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 public class CustomSql{
     private JFrame frame=new JFrame();

@@ -1,11 +1,13 @@
-package DBConn;
+package Starter;
 
-import Optimization.Evaluation.PerformanceTest.View.MysqlSlap;
-import Optimization.SqlOptimize.View.SoarConsole;
+import DBConn.ReadInfo;
+import DBConn.SaveInfo;
+import Starter.MainView;
+import Starter.MainView.*;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
 public class ConnMange {
@@ -45,7 +47,12 @@ public class ConnMange {
                 if (buttons[i].isSelected()) {
                     SaveInfo si=new SaveInfo();
                     si.deleteConn(i);
-                    break;
+                    ViewFrame.root.removeAllChildren();
+                    for(int n=0;n<ri.readInfo().length();n++) {
+                        DefaultMutableTreeNode connNode=new DefaultMutableTreeNode(ri.readInfo().getJSONObject(n).getString("connName"));
+                        ViewFrame.root.add(connNode);
+                    }
+                    ViewFrame.tree.updateUI();
                 }
             }
             jFrame.dispose();

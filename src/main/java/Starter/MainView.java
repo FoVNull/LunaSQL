@@ -1,6 +1,5 @@
 package Starter;
 
-import DBConn.ConnMange;
 import DBConn.MysqlConn;
 import DBConn.ReadInfo;
 import MysqlOperation.View.CreateTable;
@@ -68,7 +67,7 @@ public class MainView {
         }
     }
 }
-class  ViewFrame extends JFrame{
+class ViewFrame extends JFrame{
     ReadInfo ri=new ReadInfo();
     private JLabel mainView=new JLabel();
     private JLabel dbList=new JLabel();
@@ -87,9 +86,8 @@ class  ViewFrame extends JFrame{
     public static JButton listButton=new JButton();
     public static JButton cusListener=new JButton();
 
-    private DefaultMutableTreeNode root;
-    private JTree tree;
-    private DefaultMutableTreeNode connNode;
+    public static DefaultMutableTreeNode root;
+    public static JTree tree;
     private DefaultMutableTreeNode dbNode;
     private DefaultMutableTreeNode tableNode;
     private DefaultMutableTreeNode[] itemNode=new DefaultMutableTreeNode[3];
@@ -212,7 +210,7 @@ class  ViewFrame extends JFrame{
 
         root=new DefaultMutableTreeNode("数据库连接列表");
         for(int n=0;n<ri.readInfo().length();n++) {
-            connNode=new DefaultMutableTreeNode(ri.readInfo().getJSONObject(n).getString("connName"));
+            DefaultMutableTreeNode connNode=new DefaultMutableTreeNode(ri.readInfo().getJSONObject(n).getString("connName"));
             root.add(connNode);
         }
         //tree.updateUI();
@@ -421,7 +419,7 @@ class  ViewFrame extends JFrame{
         });
         //对新建连接页面的监听--------------------------------
         listButton.addActionListener(event->{
-            connNode=new DefaultMutableTreeNode(connName);
+            DefaultMutableTreeNode connNode=new DefaultMutableTreeNode(connName);
             try {
                 while (rs.next()) {
                     dbNode=new DefaultMutableTreeNode(rs.getString("Database"));
@@ -429,6 +427,8 @@ class  ViewFrame extends JFrame{
                 }
                 connNode.setUserObject(connNode.getUserObject()+"--正在运行");
                 root.add(connNode);
+                tree.expandPath(new TreePath(root));
+
                 connectingCount=connNode.getParent().getIndex(connNode);
                 connecting[connectingCount]=firstConn;
                 tree.updateUI();

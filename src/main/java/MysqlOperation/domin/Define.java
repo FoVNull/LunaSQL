@@ -1,6 +1,5 @@
 package MysqlOperation.domin;
 
-import DBConn.ConnMange;
 import org.json.JSONArray;
 
 import javax.swing.*;

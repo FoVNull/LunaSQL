@@ -35,15 +35,15 @@ class ConnViewerFrame extends JFrame {
     private JLabel passwordText=new JLabel();
     private JLabel connNameText=new JLabel();
 
-    private static JTextField connName=new JTextField();
-    private static JTextField url=new JTextField();
-    private static JTextField name=new JTextField();
-    private static JPasswordField password=new JPasswordField();
+    private JTextField connName=new JTextField();
+    private JTextField url=new JTextField();
+    private JTextField name=new JTextField();
+    private JPasswordField password=new JPasswordField();
 
     private JCheckBox checkBox1 = new JCheckBox("是否保存连接");
 
     private JButton test=new JButton();
-    public static JButton confirm=new JButton();
+    public  JButton confirm=new JButton();
     private JButton concel=new JButton();
 
     public static ResultSet rs=null;
