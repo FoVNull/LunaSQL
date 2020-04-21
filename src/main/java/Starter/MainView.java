@@ -13,7 +13,7 @@ import Optimization.Evaluation.ParameterOpt.View.ParameterView;
 import MysqlOperation.View.TableStructure;
 import MysqlOperation.View.InsertInfo;
 import Optimization.Evaluation.PerformanceTest.View.ParaEvaluation;
-import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
+import Optimization.Evaluation.PerformanceTest.domin.EvaluationIO;
 import Optimization.SqlOptimize.View.SoarConsole;
 
 import javax.swing.*;
@@ -441,7 +441,12 @@ class ViewFrame extends JFrame{
 
         logConsole.addActionListener(event->{
             LogConsoleView logConsoleView = new LogConsoleView();
-            logConsoleView.logConsoleDriver(connecting[connectingCount]);
+            try {
+                logConsoleView.logConsoleDriver(connecting[connectingCount]);
+            }catch (NullPointerException e){
+                JOptionPane.showMessageDialog(null,"未连接数据库！",
+                        "Error",JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         generalLog.addActionListener(event->{
@@ -450,7 +455,8 @@ class ViewFrame extends JFrame{
             try {
                 logRs = logReader.getGLog(connecting[connectingCount]);
             }catch (NullPointerException e){
-                JOptionPane.showMessageDialog(null,"未连接数据库！","Error",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"未连接数据库！",
+                        "Error",JOptionPane.ERROR_MESSAGE);
             }
             if(logRs!=null) {
                 JScrollPane logPane = queryLog(logRs, ++nowTabIndex);
@@ -462,17 +468,32 @@ class ViewFrame extends JFrame{
 
         slowLog.addActionListener(event->{
             LogReader logReader=new LogReader();
-            logReader.getSLog(connecting[connectingCount]);
+            try {
+                logReader.getSLog(connecting[connectingCount]);
+            }catch (NullPointerException e){
+                JOptionPane.showMessageDialog(null,"未连接数据库！",
+                        "Error",JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         errLog.addActionListener(event->{
             LogReader logReader=new LogReader();
-            logReader.getELog(connecting[connectingCount]);
+            try {
+                logReader.getELog(connecting[connectingCount]);
+            }catch (NullPointerException e){
+                JOptionPane.showMessageDialog(null,"未连接数据库！",
+                        "Error",JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         parameterEdit.addActionListener(event->{
             ParameterView parameterView=new ParameterView();
-            parameterView.paraDriver(connecting[connectingCount]);
+            try {
+                parameterView.paraDriver(connecting[connectingCount]);
+            }catch (NullPointerException e){
+                JOptionPane.showMessageDialog(null,"未连接数据库！",
+                        "Error",JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         EvaluationIO eios=new EvaluationIO();

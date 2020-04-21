@@ -1,6 +1,6 @@
 package Optimization.Evaluation.PerformanceTest.View;
 
-import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
+import Optimization.Evaluation.PerformanceTest.domin.EvaluationIO;
 
 import javax.swing.*;
 import java.awt.*;

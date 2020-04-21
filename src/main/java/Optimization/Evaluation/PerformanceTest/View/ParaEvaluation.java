@@ -1,7 +1,7 @@
 package Optimization.Evaluation.PerformanceTest.View;
 
 import Optimization.Evaluation.PerformanceTest.Service.MainThread;
-import Optimization.Evaluation.ParameterOpt.domin.EvaluationIO;
+import Optimization.Evaluation.PerformanceTest.domin.EvaluationIO;
 import Optimization.Evaluation.ParameterOpt.domin.SettingEdit;
 
 import javax.swing.*;

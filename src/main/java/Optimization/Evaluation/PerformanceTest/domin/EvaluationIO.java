@@ -1,4 +1,4 @@
-package Optimization.Evaluation.ParameterOpt.domin;
+package Optimization.Evaluation.PerformanceTest.domin;
 
 import Starter.Location;
 
