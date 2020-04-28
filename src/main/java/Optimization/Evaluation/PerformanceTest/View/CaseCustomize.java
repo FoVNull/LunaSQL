@@ -79,7 +79,7 @@ public class CaseCustomize {
         panel.add(defaultSQL);panel.add(setDefault);
 
         jFrame.add(panel);
-        jFrame.setSize(500,700);
+        jFrame.setSize(700,600);
         jFrame.setTitle("自定义用例");
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
