@@ -8,7 +8,7 @@ import java.sql.Connection;
 
 public class CaseCustomize {
 
-    public void frameDriver(Connection conn){
+    public void frameDriver(Connection conn,String cusName){
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
 
@@ -49,7 +49,7 @@ public class CaseCustomize {
                         "语句为空",JOptionPane.ERROR_MESSAGE);
             }else {
                 ParaEvaluation paraEvaluation = new ParaEvaluation();
-                paraEvaluation.autoTest(conn, sql,1);
+                paraEvaluation.autoTest(conn, sql,1,cusName);
 
                 if(ifSave.isSelected()){
                     EvaluationIO eio=new EvaluationIO();
@@ -70,7 +70,7 @@ public class CaseCustomize {
 
         setDefault.addActionListener(event->{
             ParaEvaluation paraEvaluation = new ParaEvaluation();
-            paraEvaluation.autoTest(conn, new String[]{defaultSQL.getText()},0);
+            paraEvaluation.autoTest(conn, new String[]{defaultSQL.getText()},0,cusName);
             EvaluationIO eio=new EvaluationIO();
             eio.setDefault(defaultSQL.getText());
             jFrame.dispose();

@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.io.Writer;
 
 public class SlapLog {
-    public void writeLog(String text,String cmd) throws IOException {
+    public void writeLog(String text,String cmd,String cusName) throws IOException {
         StringBuilder path= Location.Path.getPath();
-        path.append("classes/LunaLOG");
+        path.append("classes/LunaLOG/").append(cusName);
         File file = new File(path.toString());
         File file1 = new File(path.toString() +"/slap.log");
         if(!file.exists()){
@@ -39,9 +39,9 @@ public class SlapLog {
         out.write(text + "\r\n" + "command:"+ nonPwdCmd.toString());
         out.close();
     }
-    public void readLog(){
+    public void readLog(String cusName){
         StringBuilder path= Location.Path.getPath();
-        path.append("classes/LunaLOG/slap.log");
+        path.append("classes/LunaLOG/").append(cusName).append("/slap.log");
         try {
             Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " + path.toString());
         }catch (IOException e){

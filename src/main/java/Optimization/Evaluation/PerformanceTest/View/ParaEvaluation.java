@@ -12,13 +12,12 @@ import java.util.Map;
 
 public class ParaEvaluation {
 
-    public void autoTest(Connection conn,String[] sql,int testType){
-
-        MainThread mThread=new MainThread(conn,sql,testType);
+    public void autoTest(Connection conn,String[] sql,int testType,String cusName){
+        MainThread mThread=new MainThread(conn,sql,testType,cusName);
         mThread.start();
     }
 
-    public void showRes(HashMap<Integer, String[]> value,Connection conn){
+    public void showRes(HashMap<Integer, String[]> value,Connection conn,String cusName){
         for(int i=0;i<4;++i){
             if(!value.containsKey(i)) value.put(i,new String[]{"0","0","null"});
         }
@@ -66,14 +65,14 @@ public class ParaEvaluation {
 
 
         EvaluationIO eio=new EvaluationIO();
-        eio.writeLast(input);
+        eio.writeLast(input,cusName);
 
         panel.add(new JLabel("<html>参数值可在历史记录中查询</html>"));
         panel.add(new JLabel());
 
         JButton open=new JButton("查看历史记录");
         open.addActionListener(event->{
-            eio.checkHistory();
+            eio.checkHistory(cusName);
         });
 
         panel.add(open);

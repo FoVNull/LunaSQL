@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MultiCases {
-    public void driver(Connection conn){
+    public void driver(Connection conn,String cusName){
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
         JScrollPane scrollPane=new JScrollPane();
@@ -56,7 +56,7 @@ public class MultiCases {
                 String[] input = sb.toString().split(";");
 
                 ParaEvaluation paraEvaluation = new ParaEvaluation();
-                paraEvaluation.autoTest(conn, input, 2);
+                paraEvaluation.autoTest(conn, input, 2,cusName);
                 jFrame.dispose();
             }
         });

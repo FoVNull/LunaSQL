@@ -12,11 +12,11 @@ import java.util.LinkedHashMap;
 public class OptFunction {
     int i;int flag=0;
 
-    public LinkedHashMap<Integer,String[]> initTest(String[] sql,Connection conn,int testType){
+    public LinkedHashMap<Integer,String[]> initTest(String[] sql,Connection conn,int testType,String cusName){
         LinkedHashMap<Integer,String[]> res=new LinkedHashMap<>();
         for(int j=0;j<sql.length;++j){
             if(!sql[j].equals("NAN")) {
-                String[] temp = run(conn, sql[j], j);
+                String[] temp = run(conn, sql[j], j,cusName);
                 if(flag==1) {res.clear();return res;}
                 res.put(j, temp);
             }
@@ -27,7 +27,7 @@ public class OptFunction {
         return res;
     }
 
-    public String[] run(Connection conn,String sql,int type){
+    public String[] run(Connection conn,String sql,int type,String cusName){
         String[] temp=sql.split("@");
         sql=temp[0];
         int num=100;
@@ -72,7 +72,7 @@ public class OptFunction {
         n/=num;
         res[1]=n+"";
         EvaluationIO eio=new EvaluationIO();
-        String[] t=eio.readLast();
+        String[] t=eio.readLast(cusName);
         res[0]=t[type];
         res[2]=t[4];
         jFrame.dispose();

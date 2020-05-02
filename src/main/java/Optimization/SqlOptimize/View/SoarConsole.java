@@ -11,10 +11,10 @@ import java.awt.*;
 import java.io.File;
 
 public class SoarConsole {
-    public static JSONObject defaultDB=null;
+    public static JSONObject defaultDB=new JSONObject();
     public static JButton dbListen=new JButton();
     public void consoleDriver(){
-        SoarOperation sop=new SoarOperation();
+        defaultDB.put("connName","Non-DB");
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
         panel.setLayout(null);
@@ -86,9 +86,10 @@ public class SoarConsole {
         scrollRes.setViewportView(result);
 
         buttons[0].addActionListener(event->{
+            SoarOperation sop=new SoarOperation(defaultDB.getString("connName"));
             if(useDB.isSelected()){
-                if(defaultDB==null){
-                    JOptionPane.showMessageDialog(null,"请先选择测试库",
+                if(!defaultDB.has("url")){
+                    JOptionPane.showMessageDialog(null,"请先设置测试库",
                             "提示",JOptionPane.WARNING_MESSAGE);
                     dbSetting.doClick();
                 }else{
@@ -109,6 +110,7 @@ public class SoarConsole {
             sdb.driver("soar");
         });
         buttons[1].addActionListener(event->{
+            SoarOperation sop=new SoarOperation(defaultDB.getString("connName"));
             if(useDB.isSelected()) {
                 if (defaultDB == null) {
                     JOptionPane.showMessageDialog(null, "请先选择测试库",
@@ -124,16 +126,18 @@ public class SoarConsole {
             }
         });
         buttons[2].addActionListener(event->{
+            SoarOperation sop=new SoarOperation(defaultDB.getString("connName"));
             String res=sop.prettySQL(sql.getText());
             result.append(res);
         });
         buttons[3].addActionListener(event->{
+            SoarOperation sop=new SoarOperation(defaultDB.getString("connName"));
             String res=sop.mergeAlter(sql.getText());
             result.append(res);
         });
         buttons[4].addActionListener(event->{
             SoarLog sl=new SoarLog();
-            sl.readLog();
+            sl.readLog(defaultDB.getString("connName"));
         });
 
         panel.add(text1);

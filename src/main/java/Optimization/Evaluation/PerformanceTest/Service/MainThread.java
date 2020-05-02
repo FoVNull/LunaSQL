@@ -8,17 +8,19 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class    MainThread extends Thread {
+public class MainThread extends Thread {
     Connection conn;
     String[] sql;
     int testType;
+    String cusName;
 
     public static HashMap<Integer,String[]> map;
     public static int sumOfMulti;
     public static boolean stopFlag;
 
-    public MainThread(Connection conn,String[] sql,int testType){
+    public MainThread(Connection conn,String[] sql,int testType,String cusName){
         this.conn=conn;this.sql=sql;this.testType=testType;
+        this.cusName=cusName;
     }
 
     @Override
@@ -26,16 +28,16 @@ public class    MainThread extends Thread {
 
         if(testType!=2) {
             OptFunction optFunction = new OptFunction();
-            HashMap<Integer, String[]> res = optFunction.initTest(sql, conn, testType);
+            HashMap<Integer, String[]> res = optFunction.initTest(sql, conn, testType,cusName);
             if(!res.isEmpty()) {
                 ParaEvaluation paraEvaluation = new ParaEvaluation();
-                paraEvaluation.showRes(res, conn);
+                paraEvaluation.showRes(res, conn,cusName);
             }
         }else {
             multiSql();
             if(!stopFlag) {
                 ParaEvaluation paraEvaluation = new ParaEvaluation();
-                paraEvaluation.showRes(map, conn);
+                paraEvaluation.showRes(map, conn,cusName);
             }
         }
     }
@@ -63,7 +65,7 @@ public class    MainThread extends Thread {
         int avg=sumOfMulti/sql.length;
 
         EvaluationIO eio=new EvaluationIO();
-        String[] t=eio.readLast();
+        String[] t=eio.readLast(cusName);
 
         for(int i=0;i<4;++i) {
             String[] temp={t[i],avg+"",t[4]};

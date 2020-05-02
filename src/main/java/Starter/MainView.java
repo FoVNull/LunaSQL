@@ -97,6 +97,7 @@ class ViewFrame extends JFrame{
     String connectingPsw;
     String connectingUrl;
     Connection[] connecting=new Connection[100];//记录所有connection
+    String[] connCusName=new String[100];
     int connectingCount=0;
     public static Connection firstConn;//新建的连接
 
@@ -431,6 +432,7 @@ class ViewFrame extends JFrame{
 
                 connectingCount=connNode.getParent().getIndex(connNode);
                 connecting[connectingCount]=firstConn;
+                connCusName[connectingCount]=connNode.getUserObject().toString().split("-")[0];
                 tree.updateUI();
             }
             catch (SQLException e){
@@ -503,7 +505,6 @@ class ViewFrame extends JFrame{
 //                    "当前开启了多个数据库连接，日志/优化模块只针对最新的数据库连接！",
 //                    "注意",JOptionPane.WARNING_MESSAGE);
 
-
             int evaType=JOptionPane.showOptionDialog(null,"<html>请选择使用自定义语句进行评估或使用默认语句(您可以在自定义中更改默认语句)<br>您可以使用自定义方法针对不同的参数使用不同的用例测试，也可以不区分参数通过自定义脚本输入用例</html>",
                     "评估方式",JOptionPane.YES_NO_CANCEL_OPTION,1,null,new String[]{"默认","自定义","并发测试"},1);
             if (evaType == 0) {
@@ -511,13 +512,13 @@ class ViewFrame extends JFrame{
                 EvaluationIO eio = new EvaluationIO();
                 inputSql[0] = eio.readDefault();
                 ParaEvaluation ao = new ParaEvaluation();
-                ao.autoTest(connecting[connectingCount], inputSql, 0);
+                ao.autoTest(connecting[connectingCount], inputSql, 0,connCusName[connectingCount]);
             } else if (evaType == 1) {
                 CaseCustomize caseCustomize = new CaseCustomize();
-                caseCustomize.frameDriver(connecting[connectingCount]);
+                caseCustomize.frameDriver(connecting[connectingCount],connCusName[connectingCount]);
             } else if(evaType==2) {
                 MultiCases multiCases = new MultiCases();
-                multiCases.driver(connecting[connectingCount]);
+                multiCases.driver(connecting[connectingCount],connCusName[connectingCount]);
             }
         });
 
@@ -593,6 +594,7 @@ class ViewFrame extends JFrame{
                 connectingCount = temp.getParent().getIndex(temp);
                 try {
                     connecting[connectingCount] = mysqlConn.conn(connectingUrl, connectingName, connectingPsw);
+                    connCusName[connectingCount]=temp.getUserObject().toString();
                     rs = mysqlConn.showDB(connecting[connectingCount]);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -630,8 +632,8 @@ class ViewFrame extends JFrame{
                     if (isTemp){//不保存的临时链接
                         root.remove(temp);
                         for(int i=connectingCount;i<connecting.length;i++){
-                            if(connecting[i]==null) break;
-                            else connecting[i]=connecting[i+1];
+                            if(connecting[i]!=null) connecting[i]=connecting[i+1];
+                            if(connCusName[i]!=null) connCusName[i]=connCusName[i+1];
                         }
                         tree.updateUI();
                     }

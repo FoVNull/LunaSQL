@@ -11,9 +11,13 @@ public class EvaluationIO {
 //    public static void main(String...args){
 //        EvaluationIO eio=new EvaluationIO();
 //    }
-    public String[] readLast(){
+    public String[] readLast(String cusName){
         StringBuilder path= Location.Path.getPath();
-        path.append("classes/LunaLOG/Evaluation.csv");
+        path.append("classes/LunaLOG/").append(cusName);
+        File floder = new File(path.toString());
+        floder.mkdir();
+        path= Location.Path.getPath();
+        path.append("classes/LunaLOG/").append(cusName).append("/Evaluation.csv");
         File file = new File(path.toString());
         try {
             if (!file.exists()) {
@@ -38,9 +42,9 @@ public class EvaluationIO {
         return null;
     }
 
-    public void writeLast(int[] input){
+    public void writeLast(int[] input,String cusName){
         StringBuilder path= Location.Path.getPath();
-        path.append("classes/LunaLOG/Evaluation.csv");
+        path.append("classes/LunaLOG/").append(cusName).append("/Evaluation.csv");
         File file = new File(path.toString());
         try {
             Writer out = new FileWriter(file,true);
@@ -53,9 +57,9 @@ public class EvaluationIO {
         }
     }
 
-    public void checkHistory(){
+    public void checkHistory(String cusName){
         StringBuilder path= Location.Path.getPath();
-        path.append("classes/LunaLOG/Evaluation.csv");
+        path.append("classes/LunaLOG/").append(cusName).append("/Evaluation.csv");
         try {
             Runtime.getRuntime().exec("C:\\WINDOWS\\system32\\notepad.exe " +
                     path.toString());

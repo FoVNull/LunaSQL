@@ -46,8 +46,9 @@ public class SetDataBase {
         cusPanel.add(new JLabel("自定义测试库"));
         buttons[len]=new JRadioButton();
         group.add(buttons[len]);
-        cusPanel.add(buttons[len]);cusPanel.add(new JLabel());cusPanel.add(new JLabel());
+        cusPanel.add(buttons[len]);
         cusPanel.add(new JLabel());cusPanel.add(new JLabel());
+        cusPanel.add(new JLabel("自定义库的日志"));cusPanel.add(new JLabel("存储于Non-DB中"));
 
         cusPanel.add(new JLabel("地址:端口"));
         cusPanel.add(new JLabel("用户名："));
@@ -76,6 +77,7 @@ public class SetDataBase {
                 object.put("userName", cusInfo[1].getText());
                 object.put("psw", cusInfo[2].getText());
                 object.put("schema", cusInfo[3].getText());
+                object.put("connName","Non-DB");
                 SoarConsole.defaultDB=object;
                 SoarConsole.dbListen.doClick();
                 jFrame.dispose();

@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CmdExcute {
-    public String excuteCmd(String cmd,String type){
+    public String excuteCmd(String cmd,String type,String cusName){
         StringBuilder res=new StringBuilder();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         res.append("\r\n").append("=".repeat(20)).append(df.format(new Date())).append("\r\n");
@@ -25,10 +25,10 @@ public class CmdExcute {
             br.close();
             if(type.equals("soar")) {
                 SoarLog sl = new SoarLog();
-                sl.writeLog(res.toString(), cmd);
+                sl.writeLog(res.toString(), cmd,cusName);
             }else{
                 SlapLog sl=new SlapLog();
-                sl.writeLog(res.toString(),cmd);
+                sl.writeLog(res.toString(),cmd,cusName);
             }
         }catch (IOException e){
             e.printStackTrace();

@@ -4,7 +4,7 @@ import Optimization.SqlOptimize.domin.CmdExcute;
 import org.json.JSONObject;
 
 public class SlapCommand {
-    public String generateCommand(JSONObject option,JSONObject db){
+    public String generateCommand(JSONObject option,JSONObject db,String cusName){
         StringBuilder cmd=new StringBuilder();
         cmd.append("mysqlslap");
 
@@ -33,7 +33,7 @@ public class SlapCommand {
         if((boolean)option.get("ifPrint")) cmd.append(" --only-print");
 
         CmdExcute ce=new CmdExcute();
-        return ce.excuteCmd(cmd.toString(),"slap");
+        return ce.excuteCmd(cmd.toString(),"slap",cusName);
 
     }
 }

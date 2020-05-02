@@ -12,9 +12,10 @@ import java.awt.*;
 import java.io.File;
 
 public class MysqlSlap {
-    public static JSONObject defaultDB=null;
+    public static JSONObject defaultDB=new JSONObject();
     public static JButton dbListen=new JButton();
     public void consoleDriver(){
+        defaultDB.put("connName","Non-DB");
         SlapCommand sc=new SlapCommand();
         JFrame jFrame=new JFrame();
         JPanel panel=new JPanel();
@@ -50,7 +51,7 @@ public class MysqlSlap {
         });
         log.addActionListener(event->{
             SlapLog sl=new SlapLog();
-            sl.readLog();
+            sl.readLog(defaultDB.getString("connName"));
         });
         load.addActionListener(event->{
             JFileChooser jfc=new JFileChooser();
@@ -121,7 +122,8 @@ public class MysqlSlap {
         scrollRes.setViewportView(result);
 
         submit.addActionListener(event->{
-            if(defaultDB!=null&&!(!autoGen.isSelected()&&sql.getText().equals(""))) {
+            System.out.println(defaultDB);
+            if(defaultDB.has("url")&&!(!autoGen.isSelected()&&sql.getText().equals(""))) {
                 JSONObject object = new JSONObject();
                 object.put("ifAuto", autoGen.isSelected());
                 object.put("type", type.getSelectedItem());
@@ -132,7 +134,7 @@ public class MysqlSlap {
                 object.put("ifDebug", debug.isSelected());
                 object.put("ifPrint", onlyPrint.isSelected());
                 object.put("query",sql.getText());
-                String res=sc.generateCommand(object, defaultDB);
+                String res=sc.generateCommand(object, defaultDB,defaultDB.getString("connName"));
                 result.append(res);
             }else{
                 JOptionPane.showMessageDialog(null,
