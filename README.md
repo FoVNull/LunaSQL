@@ -1,4 +1,5 @@
 # LunaSQL
+jar下载：http://hikki.top/archives/
 <pre>
 功能模块：
 -数据库管理
@@ -26,4 +27,8 @@
 20.3.12<br>
 利用webswing框架，也可以在web端使用LunaSQL，满足远程操作服务器的需求（webswing支持的java版本为8-11）。<br>
 针对Linux系统做了相应的调整，已部署至云服务器 OS:CentOS 7.3<br>
+<br>
+20.4.28
+更改若干问题，发布jar测试
+
 
