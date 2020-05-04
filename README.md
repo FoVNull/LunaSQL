@@ -29,7 +29,7 @@ jar下载：http://hikki.top/archives/
 针对Linux系统做了相应的调整，已部署至云服务器 OS:CentOS 7.3<br>
 <br>
 20.5.4<br>
-jar下载：hikki.top/archives/
+所有数据，按照不同的用户自定义数据库连接分别存储。优化功能面向具体的数据库对象。
 
 
 
